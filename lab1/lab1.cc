@@ -19,12 +19,21 @@ bool check_less(float value, float check_value, string massage)
 {
     if (value < check_value)
     {
-        cout << massage << endl;
+        cerr << massage << endl;
         return true;
     }
     return false;
 }
 
+bool check_in_between(float value, float min_value, float max_value, string massage)
+{
+    if (value < min_value || value > max_value)
+    {
+        cerr << massage << endl;
+        return true;
+    }
+    return false;
+}
 int main()
 {
     cout << "INMATNINGSDEL" << "\n" 
@@ -45,7 +54,6 @@ int main()
     do
     {
         cout << "Mata in sista pris: ";
-        
         cin >> end_value;
         checker = check_less(end_value, starting_value , "FEL: Sista pris måste vara större än Första pris");
     } 
@@ -56,7 +64,9 @@ int main()
     {
         cout << "Mata in steglängd: ";  
         cin >> increment;
-        checker = check_less(increment, 0.01 , "FEL: steglängd måste vara minst 0.01");
+        checker = check_in_between(increment, 0.01f, 
+                                   end_value - starting_value, 
+                                   "FEL: steglängd måste vara minst 0.01 och som mest skillnaden mellan sista och första pris");
     } 
     while (checker == true);
     
@@ -65,10 +75,8 @@ int main()
     {
         cout << "Mata in momsprocent: ";
         cin >> tax;
-        checker = check_less(increment, 0, "FEL: momsprocent måste vara minst 0 ");
+        checker = check_in_between(tax, 0, 100, "FEL: momsprocent måste vara minst mellan 0 till 100 % ");
     } while (checker == true);
-    
-
 
     cout << "\nMOMSTABELLEN\n" 
          << setfill('=') << setw(12) << "" << "\n" << setfill(' ') 
@@ -77,12 +85,14 @@ int main()
          << right << setw(20) << "Pris med moms" << "\n"
          << setfill('-') << setw(49) << "" 
          << setfill(' ') << endl;
-    
-    for(float i = starting_value; i <= end_value; i = i + increment)
+
+    float steps{(end_value - starting_value)/increment};
+    for(int i = 0; i <= steps; i++)
     {
-        cout << right << fixed << setprecision(2) << setw(12) << i
-             << right << fixed << setprecision(2) << setw(17) << tax_amount(i, tax)
-             << right << fixed << setprecision(2) << setw(20) << total(i, tax) 
+        float value{i*increment + starting_value};
+        cout << right << fixed << setprecision(2) << setw(12) << value
+             << right << fixed << setprecision(2) << setw(17) << tax_amount(value, tax)
+             << right << fixed << setprecision(2) << setw(20) << total(value, tax) 
              << endl;
     }
     
