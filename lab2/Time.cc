@@ -14,56 +14,44 @@
         {}
     Time::Time(int hh, int mm, int ss)
         :hour{hh}, minute{mm}, second{ss}
-        {}
+        {
+            if (hh > 23 || hh < 0)
+            {
+                throw ("Fel timmar måste vara mellan 0 till 23");
+            }
+            if (mm > 59 || mm < 0)
+            {
+                throw ("Fel minuter måste vara mellan 0 till 59");
+            }
+            if (ss > 59 || ss < 0)
+            {
+                throw ("Fel sekunder måste vara mellan 0 till 59");
+            }
+
+        }
 
     // format string
-    std::string Time::time_formatter(const int time) const
+    
+
+    std::string Time::to_string(bool am_pm) const
     {
-        if (time < 10)
+        if (am_pm)
         {
-            return "0" + std::to_string(time);
+            if (hour > 11)
+            {
+            return Time::time_formatter(hour - 12) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + "am";
+            }
+
+            return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + "pm";
         }
-        else
-        {
-            return std::to_string(time);
-        }
-    }
-    std::string Time::to_string() const
-    {
+
         return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second);
     }
 
+
+
     // add time
-    void Time::add_hour() 
-    {
-        hour++;
-        if (hour > 23)
-        {
-            hour = 0;
-        } 
-    }
-    void Time::add_minute() 
-    {
-        minute++;
-        if (minute > 59)
-        {
-            minute = 0;
-            Time::add_hour();
-        }
-    }
-    void Time::add_seconds(int value) 
-    {
-        while(value > 0)
-        {
-            second++;
-            if (second > 59)
-            {
-                second = 0;
-                Time::add_minute();
-            }
-            value--;
-        }
-    }
+
     Time Time::operator+(const int value)
     {
         Time new_time{*this};
@@ -83,36 +71,6 @@
     }
 
     // subtract time
-    void Time::subtract_hour()
-    {
-        hour--;
-        if (hour < 0)
-        {
-            hour = 23;
-        } 
-    }
-    void Time::subtract_minute()
-    {
-        minute--;
-        if (minute < 0)
-        {
-            minute = 59;
-            Time::subtract_hour();
-        }
-    }
-    void Time::subtract_seconds(int value)
-    {
-        while(value > 0)
-        {
-            second--;
-            if (second < 0)
-            {
-                second = 59;
-                Time::subtract_minute();
-            }
-            value--;
-        }
-    }
     Time Time::operator-(const int value)
     {
         Time new_time{*this};
@@ -132,10 +90,7 @@
     }
 
     //comparison operators
-    int Time::calc_time() const
-    {
-        return hour*60*60 + minute*60 + second;
-    }
+
 
     bool Time::operator==(Time compare) const
     {
@@ -179,7 +134,7 @@
     }
     bool Time::operator>=(Time compare) const
     {
-        if (calc_time() >= compare.calc_time())
+        if (Time::calc_time() >= compare.Time::calc_time())
         {
             return true;
         }
@@ -205,7 +160,7 @@
         int hour_i{stoi(temp_hour)};
         int min_i{stoi(temp_min)};
         int sec_i{stoi(temp_sec)};
-
+        
         if (hour_i > 23 || hour_i < 0)
         {
             throw std::istream::failure("Fel timmar måste vara mellan 0 till 23");
@@ -225,5 +180,85 @@
         time.second = sec_i;
         return is;
     }
-    
 
+    //------------------PRIVATE--------------------------
+
+    //format string
+    std::string Time::time_formatter(const int time) const
+    {
+        if (time < 10)
+        {
+            return "0" + std::to_string(time);
+        }
+        else
+        {
+            return std::to_string(time);
+        }
+    }
+    // add time
+    void Time::add_hour() 
+    {
+        hour++;
+        if (hour > 23)
+        {
+            hour = 0;
+        } 
+    }
+    void Time::add_minute() 
+    {
+        minute++;
+        if (minute > 59)
+        {
+            minute = 0;
+            Time::add_hour();
+        }
+    }
+    void Time::add_seconds(int value) 
+    {
+        while(value > 0)
+        {
+            second++;
+            if (second > 59)
+            {
+                second = 0;
+                Time::add_minute();
+            }
+            value--;
+        }
+    }
+    // subtract time
+    void Time::subtract_hour()
+    {
+        hour--;
+        if (hour < 0)
+        {
+            hour = 23;
+        } 
+    }
+    void Time::subtract_minute()
+    {
+        minute--;
+        if (minute < 0)
+        {
+            minute = 59;
+            Time::subtract_hour();
+        }
+    }
+    void Time::subtract_seconds(int value)
+    {
+        while(value > 0)
+        {
+            second--;
+            if (second < 0)
+            {
+                second = 59;
+                Time::subtract_minute();
+            }
+            value--;
+        }
+    }
+    // comparison operators calculates the time in second for easy comparison
+    int Time::calc_time() const
+    {
+        return hour*60*60 + minute*60 + second;
+    }

@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "Time.h"
+#include <sstream>
 // här lägger ni era testfall. 
 // Jobba enligt TDD; 
 //  1. Lägg till testfall
@@ -54,5 +55,15 @@ TEST_CASE("Test comparison operator")
     REQUIRE((t1 >= t2) == true);
     REQUIRE((t1 <= t2) == true);
 
+}
+TEST_CASE("TEST string stream operater")
+{
+    Time t1{};
+    std::ostringstream oss{};
+    oss << t1 << std::flush;
+    REQUIRE(oss.str() == "00:00:00");
+    std::istringstream iss{"23:59:59"};
+    iss >> t1;
+    REQUIRE(t1.to_string() == "23:59:59");
 }
 
