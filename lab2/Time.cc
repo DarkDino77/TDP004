@@ -5,42 +5,36 @@
 #include <string>
 #include <iomanip>
 
-using namespace std;
+#include "Time.h"
 
-class Time
-{
 
-public:
-    //constructors
-    Time()
+
+    Time::Time()
         :hour{}, minute{}, second{}
         {}
-    Time(int hh, int mm, int ss)
+    Time::Time(int hh, int mm, int ss)
         :hour{hh}, minute{mm}, second{ss}
         {}
+
     // format string
-    string time_formatter(const int time)
+    std::string Time::time_formatter(const int time) const
     {
         if (time < 10)
         {
-            return "0" + to_string(time);
+            return "0" + std::to_string(time);
         }
         else
         {
-            return to_string(time);
+            return std::to_string(time);
         }
     }
-    string get_formated_time()
+    std::string Time::to_string() const
     {
-        return "[" + time_formatter(hour) + ":"+ time_formatter(minute) + ":" + time_formatter(second) + "]";
+        return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second);
     }
-    //print time
-    void print()
-    {
-        cout << get_formated_time() << endl;
-    }
+
     // add time
-    void add_hour()
+    void Time::add_hour() 
     {
         hour++;
         if (hour > 23)
@@ -48,16 +42,16 @@ public:
             hour = 0;
         } 
     }
-    void add_minute()
+    void Time::add_minute() 
     {
         minute++;
         if (minute > 59)
         {
             minute = 0;
-            add_hour();
+            Time::add_hour();
         }
     }
-    void add_seconds(int value)
+    void Time::add_seconds(int value) 
     {
         while(value > 0)
         {
@@ -65,22 +59,171 @@ public:
             if (second > 59)
             {
                 second = 0;
-                add_minute();
+                Time::add_minute();
             }
             value--;
         }
     }
-    Time operator+(const int value)
+    Time Time::operator+(const int value)
     {
         Time new_time{*this};
-        new_time.add_seconds(value);
+        new_time.Time::add_seconds(value);
         return new_time;
     }
-private:
-    int hour;
-    int minute;
-    int second;
+    Time& Time::operator++()
+    {
+        Time::add_seconds(1);
+        return *this;
+    }
+    Time Time::operator++(int)
+    {
+        Time new_time{*this};
+        operator++();
+        return new_time;
+    }
 
-};
+    // subtract time
+    void Time::subtract_hour()
+    {
+        hour--;
+        if (hour < 0)
+        {
+            hour = 23;
+        } 
+    }
+    void Time::subtract_minute()
+    {
+        minute--;
+        if (minute < 0)
+        {
+            minute = 59;
+            Time::subtract_hour();
+        }
+    }
+    void Time::subtract_seconds(int value)
+    {
+        while(value > 0)
+        {
+            second--;
+            if (second < 0)
+            {
+                second = 59;
+                Time::subtract_minute();
+            }
+            value--;
+        }
+    }
+    Time Time::operator-(const int value)
+    {
+        Time new_time{*this};
+        new_time.Time::subtract_seconds(value);
+        return new_time;
+    }
+    Time& Time::operator--()
+    {
+        Time::subtract_seconds(1);
+        return *this;
+    }
+    Time Time::operator--(int)
+    {
+        Time new_time{*this};
+        operator--();
+        return new_time;
+    }
 
+    //comparison operators
+    int Time::calc_time() const
+    {
+        return hour*60*60 + minute*60 + second;
+    }
+
+    bool Time::operator==(Time compare) const
+    {
+        if (Time::calc_time() == compare.Time::calc_time())
+        {
+            return true;
+        }
+        return false;
+    }
+    bool Time::operator!=(Time compare) const
+    {
+        if (Time::calc_time() != compare.Time::calc_time())
+        {
+            return true;
+        }
+        return false;
+    }
+    bool Time::operator>(Time compare) const
+    {
+        if (Time::calc_time() > compare.Time::calc_time())
+        {
+            return true;
+        }
+        return false;
+    }
+    bool Time::operator<(Time compare) const
+    {
+        if (Time::calc_time() < compare.Time::calc_time())
+        {
+            return true;
+        }
+        return false;
+    }
+    bool Time::operator<=(Time compare) const
+    {
+        if (Time::calc_time() <= compare.Time::calc_time())
+        {
+            return true;
+        }
+        return false;
+    }
+    bool Time::operator>=(Time compare) const
+    {
+        if (calc_time() >= compare.calc_time())
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    // Stream operator 
+    std::ostream& operator<<(std::ostream &os, Time &item)
+    {
+        os << item.to_string();
+        return os;
+    }
+        
+    std::istream& operator>>(std::istream &is, Time &time)
+    {
+        std::string temp_hour{};
+        std::getline(is, temp_hour, ':');
+        std::string temp_min{};
+        std::getline(is, temp_min, ':');
+        std::string temp_sec{};
+        is >> temp_sec;
+
+        int hour_i{stoi(temp_hour)};
+        int min_i{stoi(temp_min)};
+        int sec_i{stoi(temp_sec)};
+
+        if (hour_i > 23 || hour_i < 0)
+        {
+            throw std::istream::failure("Fel timmar måste vara mellan 0 till 23");
+        }
+        if (min_i > 59 || min_i < 0)
+        {
+            throw std::istream::failure("Fel minuter måste vara mellan 0 till 59");
+        }
+        if (sec_i > 59 || sec_i < 0)
+        {
+            throw std::istream::failure("Fel sekunder måste vara mellan 0 till 59");
+        }
+        
+
+        time.hour = hour_i;
+        time.minute = min_i;
+        time.second = sec_i;
+        return is;
+    }
+    
 
