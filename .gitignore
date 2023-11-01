@@ -1,6 +1,7 @@
 *~
 *.temp
 *.out
+*.o
 henha806
 denab905
 .vscode
