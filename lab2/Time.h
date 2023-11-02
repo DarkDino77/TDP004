@@ -30,10 +30,13 @@ public:
     bool operator<=(Time compare) const;
     bool operator>=(Time compare) const;
     
-    // Streaming
-    friend std::istream& operator>>(std::istream &is, Time &time);
+    void set_hour(int hh);
+    void set_minute(int mm);
+    void set_second(int ss);
+    void add_seconds(int value);
 
 private:
+
     int hour;
     int minute;
     int second;
@@ -42,7 +45,7 @@ private:
     // add time
     void add_hour();
     void add_minute();
-    void add_seconds(int value);
+    
      // subtract time
     void subtract_hour();
     void subtract_minute();
@@ -53,6 +56,8 @@ private:
 };
 // Streaming
 std::ostream& operator<<(std::ostream &os, Time &item);
-
-
+// Streaming
+std::istream& operator>>(std::istream &is, Time &time);
+// Additon 
+Time operator+(const int value, const Time& time);
 #endif
