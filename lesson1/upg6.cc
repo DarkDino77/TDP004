@@ -1,28 +1,23 @@
-// 'Encapsulation' innebär att man buntar samman data och de funktioner som manipulerar dem.
-// Detta är för att skydda datan från att manipuleras på ett oväntat sätt, men också gömma information som
-// inte ska kunna kommas åt.
+//Abstraction handlar om att skriva kod saker på ett sätt som gömmer hur det funkar.
 
-// Ett dåligt exempel på en enkapsulering är
-class Car
+// Ett dåligt exempel på abstraktion
+bool check_less_than_5(float value)
 {
-public:
-    double speed;
-
-    Car() 
-    : speed(0.0)
-    {};
-
+    if (value < 5)
+    {
+        cout << "är sant" << endl;
+        return true;
+    }
+    return false;
 };
 
 // Ett bättre exempel på detta hade kunnat sett ut på följande vis:
-class Car
+bool check_less(float value, float check_value, std::string massage)
 {
-public:
-    Car() 
-    : speed(0.0)
-    {};
-    void change_speed(double speed);
-
-private:
-    double speed;
+    if (value < check_value)
+    {
+        cout<< massage << endl;
+        return true;
+    }
+    return false;
 };

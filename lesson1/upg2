@@ -1,0 +1,7 @@
+    Object oriented analysis (OOA)
+
+The first step of Object-oriented software development is Object Oriented Analysis (OOA).  In the system analysis stage of software engineering, system analysts must integrate with users to make precise Accurate analysis and clear description, summarize what the system should do (not how) from a macro perspective. Face right the analysis of the image should be based on object-oriented concepts and methods. In the analysis of the task, from the objective existence of things and the relationship between the related objects (including the attributes and behaviors of the objects) and the relationship between the objects are summarized, and the Objects with the same attributes and behaviors are represented by a class. Establish a need to reflect the real work situation Seek a model. The model formed at this stage is relatively rough (rather than fine).
+
+    Object oriented design (OOD)
+
+Second step of Object-oriented software development  is Object Oriented Design (OOD), According to the demand model formed in the object-oriented analysis stage, each part is specifically designed. The design of the line class, the design of the class may contain multiple levels (using inheritance and derivation mechanisms). Then these classes are put forward the ideas and methods of program design, including the design of algorithms. In the design stage, no specific plan is involved. Computer language, but a more general description tool (such as pseudo code or flowchart) to describe.

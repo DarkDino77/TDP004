@@ -10,10 +10,10 @@ class Paper
         int get_height();
 
         std::string read_row(int row);
-        void write_row(int row, std::string text);
+        void write_row(int row, const std::string& text);
 
     private:
         int width;
         int height;
-
+        std::string content[];
 };
