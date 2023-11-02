@@ -4,6 +4,25 @@
 
 using namespace std;
 
+/* Komplettering: Upprepa inte cin statements i onödan. Man kan läsa in till flera variabler i rad genom att 
+   “chaina” cin strömmar. Detta för att operatorn utvärderas och returnerar strömmer i sig.   
+
+   Tex:  
+
+     int i;  
+
+     float f;  
+
+     cin >> i;  
+
+     cin >> f;  
+
+   Kan skrivas som:  
+
+     cin >> i>> f;  
+
+*/ 
+
 int main()
 {   
 
@@ -36,8 +55,7 @@ int main()
     cin.ignore(1000, '\n');
 
     cout << "Skriv in ett heltal och ett flyttal: ";
-    cin >> natural_number;
-    cin >> real_number;
+    cin >> natural_number >> real_number;
     cout << "Du skrev in heltalet:" 
          << right << setw(10) 
          << natural_number << endl; 
@@ -47,8 +65,7 @@ int main()
     cin.ignore(1000, '\n');
 
     cout << "Skriv in ett flyttal och ett heltal: ";
-    cin >> real_number;
-    cin >> natural_number;
+    cin >> real_number >> natural_number;
     cout << "Du skrev in heltalet:" 
          << right << setfill('-') << setw(10) 
          << natural_number << endl; 
@@ -74,16 +91,14 @@ int main()
     cin.ignore(1000, '\n');
 
     cout << "Skriv in ett heltal och en sträng: ";
-    cin >> natural_number;
-    cin >> text;
+    cin >> natural_number >> text;
     cout << "Du skrev in talet |" << natural_number 
          << "| och strängen |" << text << "|." 
          << "\n" << endl;
     cin.ignore(1000, '\n');
 
     cout << "Skriv in en sträng och ett flyttal: ";
-    cin >> text;
-    cin >> real_number;
+    cin >> text >> real_number;
     cout << "Du skrev in talet \"" 
          << fixed << setprecision(3) << real_number 
          << "\" och strängen \"" << text << "\"." 
