@@ -12,6 +12,7 @@
 Time::Time()
     :hour{}, minute{}, second{}
     {}
+
 Time::Time(int hh, int mm, int ss)
     :hour{}, minute{}, second{}
     {
@@ -29,10 +30,10 @@ std::string Time::to_string(bool am_pm) const
     {
         if (hour > 11)
         {
-        return Time::time_formatter(hour - 12) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + "am";
+        return Time::time_formatter(hour - 12) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + " pm";
         }
 
-        return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + "pm";
+        return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + " am";
     }
 
     return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second);
@@ -42,15 +43,15 @@ std::string Time::to_string(bool am_pm) const
 
 // add time
 
-Time Time::operator+(const int value)
+Time Time::operator+(const int VALUE)
 {
     Time new_time{*this};
-    if (value < 0)
+    if (VALUE < 0)
     {
-        new_time.Time::subtract_seconds(-value);
+        new_time.Time::subtract_seconds(-VALUE);
         return new_time;    
     }
-    new_time.Time::add_seconds(value);
+    new_time.Time::add_seconds(VALUE);
     return new_time;
 }
 
@@ -59,6 +60,7 @@ Time& Time::operator++()
     Time::add_seconds(1);
     return *this;
 }
+
 Time Time::operator++(int)
 {
     Time new_time{*this};
@@ -67,22 +69,24 @@ Time Time::operator++(int)
 }
 
 // subtract time
-Time Time::operator-(const int value)
+Time Time::operator-(const int VALUE)
 {
     Time new_time{*this};
-    if (value < 0)
+    if (VALUE < 0)
     {
-        new_time.Time::add_seconds(-value);
+        new_time.Time::add_seconds(-VALUE);
         return new_time;    
     }
-    new_time.Time::subtract_seconds(value);
+    new_time.Time::subtract_seconds(VALUE);
     return new_time;
 }
+
 Time& Time::operator--()
 {
     Time::subtract_seconds(1);
     return *this;
 }
+
 Time Time::operator--(int)
 {
     Time new_time{*this};
@@ -91,51 +95,54 @@ Time Time::operator--(int)
 }
 
 //comparison operators
+bool Time::operator==(Time COMPARE) const
+{
+    if (Time::calc_time() == COMPARE.Time::calc_time())
+    {
+        return true;
+    }
+    return false;
+}
 
+bool Time::operator!=(Time COMPARE) const
+{
+    if (Time::calc_time() != COMPARE.Time::calc_time())
+    {
+        return true;
+    }
+    return false;
+}
 
-bool Time::operator==(Time compare) const
+bool Time::operator>(Time COMPARE) const
 {
-    if (Time::calc_time() == compare.Time::calc_time())
+    if (Time::calc_time() > COMPARE.Time::calc_time())
     {
         return true;
     }
     return false;
 }
-bool Time::operator!=(Time compare) const
+
+bool Time::operator<(Time COMPARE) const
 {
-    if (Time::calc_time() != compare.Time::calc_time())
+    if (Time::calc_time() < COMPARE.Time::calc_time())
     {
         return true;
     }
     return false;
 }
-bool Time::operator>(Time compare) const
+
+bool Time::operator<=(Time COMPARE) const
 {
-    if (Time::calc_time() > compare.Time::calc_time())
+    if (Time::calc_time() <= COMPARE.Time::calc_time())
     {
         return true;
     }
     return false;
 }
-bool Time::operator<(Time compare) const
+
+bool Time::operator>=(Time COMPARE) const
 {
-    if (Time::calc_time() < compare.Time::calc_time())
-    {
-        return true;
-    }
-    return false;
-}
-bool Time::operator<=(Time compare) const
-{
-    if (Time::calc_time() <= compare.Time::calc_time())
-    {
-        return true;
-    }
-    return false;
-}
-bool Time::operator>=(Time compare) const
-{
-    if (Time::calc_time() >= compare.Time::calc_time())
+    if (Time::calc_time() >= COMPARE.Time::calc_time())
     {
         return true;
     }
@@ -145,17 +152,18 @@ bool Time::operator>=(Time compare) const
 //------------------PRIVATE--------------------------
 
 //format string
-std::string Time::time_formatter(const int time) const
+std::string Time::time_formatter(const int TIME) const
 {
-    if (time < 10)
+    if (TIME < 10)
     {
-        return "0" + std::to_string(time);
+        return "0" + std::to_string(TIME);
     }
     else
     {
-        return std::to_string(time);
+        return std::to_string(TIME);
     }
 }
+
 // add time
 void Time::add_hour() 
 {
@@ -165,6 +173,7 @@ void Time::add_hour()
         hour = 0;
     } 
 }
+
 void Time::add_minute() 
 {
     minute++;
@@ -174,6 +183,7 @@ void Time::add_minute()
         Time::add_hour();
     }
 }
+
 void Time::add_seconds(int value) 
 {
     while(value > 0)
@@ -187,6 +197,7 @@ void Time::add_seconds(int value)
         value--;
     }
 }
+
 // subtract time
 void Time::subtract_hour()
 {
@@ -196,6 +207,7 @@ void Time::subtract_hour()
         hour = 23;
     } 
 }
+
 void Time::subtract_minute()
 {
     minute--;
@@ -205,6 +217,7 @@ void Time::subtract_minute()
         Time::subtract_hour();
     }
 }
+
 void Time::subtract_seconds(int value)
 {
     while(value > 0)
@@ -218,11 +231,13 @@ void Time::subtract_seconds(int value)
         value--;
     }
 }
+
 // comparison operators calculates the time in second for easy comparison
 int Time::calc_time() const
 {
     return hour*60*60 + minute*60 + second;
 }
+
 void Time::set_hour(int hh)
 {
     if (hh > 23 || hh < 0)
@@ -231,6 +246,7 @@ void Time::set_hour(int hh)
     }
     hour = hh;
 }
+
 void Time::set_minute(int mm)
 {
     if (mm > 59 || mm < 0)
@@ -239,6 +255,7 @@ void Time::set_minute(int mm)
     }   
     minute = mm;
 }
+
 void Time::set_second(int ss)
 {
     if (ss > 59 || ss < 0)
@@ -247,6 +264,7 @@ void Time::set_second(int ss)
     }
     second = ss;
 }
+
 //------------outside class--------------------
 // Stream operator 
 std::ostream& operator<<(std::ostream &os, Time &item)
@@ -274,11 +292,13 @@ std::istream& operator>>(std::istream &is, Time &time)
     {
         is.setstate(std::ios_base::failbit);
     }
+
     if (min_i > 59 || min_i < 0)
     {
         is.setstate(std::ios_base::failbit);
         
     }
+
     if (sec_i > 59 || sec_i < 0)
     {
         is.setstate(std::ios_base::failbit);
@@ -289,12 +309,12 @@ std::istream& operator>>(std::istream &is, Time &time)
         throw std::istream::failure("Felaktig inmatning");
     }
     
-
     time.Time::set_hour(stoi(temp_hour));
     time.Time::set_minute(stoi(temp_min));
     time.Time::set_second(stoi(temp_sec));
     return is;
 }
+
 Time operator+(const int value, const Time& time)
 {
     Time new_time{time};    

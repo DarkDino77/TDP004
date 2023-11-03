@@ -33,7 +33,9 @@ public:
     void set_hour(int hh);
     void set_minute(int mm);
     void set_second(int ss);
+    
     void add_seconds(int value);
+
 
 private:
 
