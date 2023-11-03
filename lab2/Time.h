@@ -5,61 +5,69 @@
 class Time
 {
 public:
-    //constructor
+
+    // Constructor
     Time();
     Time(int hh, int mm, int ss);
 
-    //print return a formated string
-    std::string to_string(bool am_pm=false) const;
+    // Return a formated string
+    std::string to_string(bool am_pm = false) const;
 
-    // add time
-    Time operator+(const int value);
+    // Addtion operators
+    Time operator+(int const value);
     Time& operator++();
     Time operator++(int);
 
-    // subtract time
-    Time operator-(const int value);
+    // Subtraction operators
+    Time operator-(int const value);
     Time& operator--();
     Time operator--(int);
 
-    //comparison operators
-    bool operator==(Time compare) const;
-    bool operator!=(Time compare) const;
-    bool operator>(Time compare) const;
-    bool operator<(Time compare) const;
-    bool operator<=(Time compare) const;
-    bool operator>=(Time compare) const;
-    
+    // Comparison operators
+    bool operator==(Time const &compare) const;
+    bool operator!=(Time const &compare) const;
+    bool operator>(Time const &compare) const;
+    bool operator<(Time const &compare) const;
+    bool operator<=(Time const &compare) const;
+    bool operator>=(Time const &compare) const;
+
+    // Set a specific time
     void set_hour(int hh);
     void set_minute(int mm);
     void set_second(int ss);
     
-    void add_seconds(int value);
-
-
 private:
 
+    // Variable defenition
     int hour;
     int minute;
     int second;
-    //format string
-    std::string time_formatter(const int time) const;
-    // add time
+
+    // Format string
+    std::string time_formatter(int const time) const;
+
+    // Add time
     void add_hour();
     void add_minute();
-    
-     // subtract time
+    void add_seconds(int value);
+
+    // Subtract time
     void subtract_hour();
     void subtract_minute();
     void subtract_seconds(int value);
-    // comparison operators calculates the time in second for easy comparison
-    int calc_time() const;
+
+    // Comparison operators calculates the time in seconds for easy comparison
+    int time_as_seconds() const;
 
 };
-// Streaming
+
+// Streaming out
 std::ostream& operator<<(std::ostream &os, Time &item);
-// Streaming
+
+// Streaming in 
 std::istream& operator>>(std::istream &is, Time &time);
-// Additon 
-Time operator+(const int value, const Time& time);
+
+// Addtion operator
+Time operator+(int const value, Time const &time);
+
 #endif

@@ -8,50 +8,52 @@
 #include "Time.h"
 
 //-----------------------Public---------------------------
-//Constructors
+// Constructors
 Time::Time()
-    :hour{}, minute{}, second{}
-    {}
+:hour{}, minute{}, second{}
+{}
 
 Time::Time(int hh, int mm, int ss)
-    :hour{}, minute{}, second{}
-    {
-        set_hour(hh);
-        set_minute(mm);
-        set_second(ss);
-    }
+:hour{}, minute{}, second{}
+{
+    set_hour(hh);
+    set_minute(mm);
+    set_second(ss);
+}
 
-// format string
-
-
+// Format string
 std::string Time::to_string(bool am_pm) const
 {
     if (am_pm)
     {
         if (hour > 11)
         {
-        return Time::time_formatter(hour - 12) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + " pm";
+        return Time::time_formatter(hour - 12) + ":" 
+               + Time::time_formatter(minute) + ":" 
+               + Time::time_formatter(second) + " pm";
         }
 
-        return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second) + " am";
+        return Time::time_formatter(hour) + ":" 
+               + Time::time_formatter(minute) + ":" 
+               + Time::time_formatter(second) + " am";
     }
 
-    return Time::time_formatter(hour) + ":"+ Time::time_formatter(minute) + ":" + Time::time_formatter(second);
+    return Time::time_formatter(hour) + ":" 
+           + Time::time_formatter(minute) + ":" 
+           + Time::time_formatter(second);
 }
 
-
-
-// add time
-
-Time Time::operator+(const int VALUE)
+// Addtion operators
+Time Time::operator+(int const value)
 {
     Time new_time{*this};
-    if (VALUE < 0)
+    if (value < 0)
     {
-        new_time.Time::subtract_seconds(-VALUE);
+        new_time.Time::subtract_seconds(-value);
         return new_time;    
     }
-    new_time.Time::add_seconds(VALUE);
+
+    new_time.Time::add_seconds(value);
     return new_time;
 }
 
@@ -68,16 +70,17 @@ Time Time::operator++(int)
     return new_time;
 }
 
-// subtract time
-Time Time::operator-(const int VALUE)
+// Subtraction operators
+Time Time::operator-(int const value)
 {
     Time new_time{*this};
-    if (VALUE < 0)
+    if (value < 0)
     {
-        new_time.Time::add_seconds(-VALUE);
+        new_time.Time::add_seconds(-value);
         return new_time;    
     }
-    new_time.Time::subtract_seconds(VALUE);
+
+    new_time.Time::subtract_seconds(value);
     return new_time;
 }
 
@@ -94,77 +97,113 @@ Time Time::operator--(int)
     return new_time;
 }
 
-//comparison operators
-bool Time::operator==(Time COMPARE) const
+// Comparison operators
+bool Time::operator==(Time const &compare) const
 {
-    if (Time::calc_time() == COMPARE.Time::calc_time())
+    if (Time::time_as_seconds() == compare.Time::time_as_seconds())
     {
         return true;
     }
+
     return false;
 }
 
-bool Time::operator!=(Time COMPARE) const
+bool Time::operator!=(Time const &compare) const
 {
-    if (Time::calc_time() != COMPARE.Time::calc_time())
+    if (Time::time_as_seconds() != compare.Time::time_as_seconds())
     {
         return true;
     }
+
     return false;
 }
 
-bool Time::operator>(Time COMPARE) const
+bool Time::operator>(Time const &compare) const
 {
-    if (Time::calc_time() > COMPARE.Time::calc_time())
+    if (Time::time_as_seconds() > compare.Time::time_as_seconds())
     {
         return true;
     }
+
     return false;
 }
 
-bool Time::operator<(Time COMPARE) const
+bool Time::operator<(Time const &compare) const
 {
-    if (Time::calc_time() < COMPARE.Time::calc_time())
+    if (Time::time_as_seconds() < compare.Time::time_as_seconds())
     {
         return true;
     }
+
     return false;
 }
 
-bool Time::operator<=(Time COMPARE) const
+bool Time::operator<=(Time const &compare) const
 {
-    if (Time::calc_time() <= COMPARE.Time::calc_time())
+    if (Time::time_as_seconds() <= compare.Time::time_as_seconds())
     {
         return true;
     }
+
     return false;
 }
 
-bool Time::operator>=(Time COMPARE) const
+bool Time::operator>=(Time const &compare) const
 {
-    if (Time::calc_time() >= COMPARE.Time::calc_time())
+    if (Time::time_as_seconds() >= compare.Time::time_as_seconds())
     {
         return true;
     }
+
     return false;
+}
+
+// Set a specific time
+void Time::set_hour(int hh)
+{
+    if (hh > 23 || hh < 0)
+    {
+        throw ("Fel timmar måste vara mellan 0 till 23");
+    }
+
+    hour = hh;
+}
+
+void Time::set_minute(int mm)
+{
+    if (mm > 59 || mm < 0)
+    {
+        throw ("Fel minuter måste vara mellan 0 till 59");
+    } 
+
+    minute = mm;
+}
+
+void Time::set_second(int ss)
+{
+    if (ss > 59 || ss < 0)
+    {
+        throw ("Fel sekunder måste vara mellan 0 till 59");
+    }
+
+    second = ss;
 }
 
 //------------------PRIVATE--------------------------
-
-//format string
-std::string Time::time_formatter(const int TIME) const
+// Format string
+std::string Time::time_formatter(int const time) const
 {
-    if (TIME < 10)
+    if (time < 10)
     {
-        return "0" + std::to_string(TIME);
+        return "0" + std::to_string(time);
     }
     else
     {
-        return std::to_string(TIME);
+        return std::to_string(time);
     }
 }
 
-// add time
+// Add time
 void Time::add_hour() 
 {
     hour++;
@@ -194,11 +233,12 @@ void Time::add_seconds(int value)
             second = 0;
             Time::add_minute();
         }
+
         value--;
     }
 }
 
-// subtract time
+// Subtract time
 void Time::subtract_hour()
 {
     hour--;
@@ -228,51 +268,27 @@ void Time::subtract_seconds(int value)
             second = 59;
             Time::subtract_minute();
         }
+
         value--;
     }
 }
 
-// comparison operators calculates the time in second for easy comparison
-int Time::calc_time() const
+// Comparison operators calculates the time in second for easy comparison
+int Time::time_as_seconds() const
 {
     return hour*60*60 + minute*60 + second;
 }
 
-void Time::set_hour(int hh)
-{
-    if (hh > 23 || hh < 0)
-    {
-        throw ("Fel timmar måste vara mellan 0 till 23");
-    }
-    hour = hh;
-}
-
-void Time::set_minute(int mm)
-{
-    if (mm > 59 || mm < 0)
-    {
-        throw ("Fel minuter måste vara mellan 0 till 59");
-    }   
-    minute = mm;
-}
-
-void Time::set_second(int ss)
-{
-    if (ss > 59 || ss < 0)
-    {
-        throw ("Fel sekunder måste vara mellan 0 till 59");
-    }
-    second = ss;
-}
-
 //------------outside class--------------------
 // Stream operator 
+// Streaming out
 std::ostream& operator<<(std::ostream &os, Time &item)
 {
     os << item.to_string();
     return os;
 }
-    
+
+// Streaming in    
 std::istream& operator>>(std::istream &is, Time &time)
 {
     std::string temp_hour{};
@@ -286,8 +302,8 @@ std::istream& operator>>(std::istream &is, Time &time)
     int min_i{stoi(temp_min)};
     int sec_i{stoi(temp_sec)};
 
-    // Kollar om inmatningen är inom det giltiga intervallet
-    // Om det inte är det så sätts en fail flagga
+    // Checks if input is in the valid intervale.
+    // If so it adds a fail flag to istream.
     if (hour_i > 23 || hour_i < 0)
     {
         is.setstate(std::ios_base::failbit);
@@ -303,21 +319,23 @@ std::istream& operator>>(std::istream &is, Time &time)
     {
         is.setstate(std::ios_base::failbit);
     }
-    // om en fail flagga finns så krachar programet
+
+    // If istream has a fail flag throw an exception 
     if (is.fail())
     {
-        throw std::istream::failure("Felaktig inmatning");
+        throw std::istream::failure("FEL: Felaktig inmatning\nFÖRKLARING: Formatet måste vara 'HH:MM:SS' där HH är 0-23, MM är 0-59 och SS är 0-59");
     }
     
     time.Time::set_hour(stoi(temp_hour));
     time.Time::set_minute(stoi(temp_min));
     time.Time::set_second(stoi(temp_sec));
+
     return is;
 }
 
-Time operator+(const int value, const Time& time)
+// Addtion operator
+Time operator+(int const value, Time const &time)
 {
-    Time new_time{time};    
-    new_time.Time::add_seconds(value);
-    return new_time;
+    Time new_time{time};
+    return new_time + value;    
 }
