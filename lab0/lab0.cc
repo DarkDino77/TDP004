@@ -4,25 +4,6 @@
 
 using namespace std;
 
-/* Komplettering: Upprepa inte cin statements i onödan. Man kan läsa in till flera variabler i rad genom att 
-   “chaina” cin strömmar. Detta för att operatorn utvärderas och returnerar strömmer i sig.   
-
-   Tex:  
-
-     int i;  
-
-     float f;  
-
-     cin >> i;  
-
-     cin >> f;  
-
-   Kan skrivas som:  
-
-     cin >> i>> f;  
-
-*/ 
-
 int main()
 {   
 
