@@ -11,8 +11,10 @@
 // This define lets Catch create the main test program
 // (Must be in only one place!)
 #include "catch.hpp"
+#include "Sorted_List.h"
 
 #include <random>
+#include <iostream>
 
 //=======================================================================
 // Test cases
@@ -21,7 +23,6 @@
 TEST_CASE( "Create an empty list" ) 
 {
     Sorted_List l{};
-
     REQUIRE( l.is_empty() );
     REQUIRE( l.size() == 0 );
 }
@@ -31,19 +32,19 @@ TEST_CASE( "Create an empty list" )
 // Move this comment and following #if 0 down one case at a time!
 // Make sure to close any open braces before this comment.
 // The #if 0 will disable the rest of the file.
-#if 0
+ 
 
 TEST_CASE( "Insert an item in an empty list" ) 
 {
     Sorted_List l{};
 
     l.insert(5);
-  
-    REQUIRE( l.is_empty() );
-    REQUIRE( l.size() == 0 );
+
+    REQUIRE( l.is_empty() == false);
+    REQUIRE( l.size() == 1 );
   
 }
-
+  
 SCENARIO( "Empty lists" ) 
 {
   
@@ -53,28 +54,33 @@ SCENARIO( "Empty lists" )
 
 	REQUIRE( l.is_empty() );
 	REQUIRE( l.size() == 0 );
-    
+
 	WHEN( "an item is inserted" )
 	{
 
 	    // insert an item
-      
+		l.insert(5);
+
 	    THEN( "the size increase and the item is first in the list" )
 	    {
-		REQUIRE( l.is_empty()  );
-		REQUIRE( l.size() == 0 );
-		REQUIRE( /* test that item is first in list */ );
+		REQUIRE( l.is_empty() == false );
+		REQUIRE( l.size() == 1 );
+		/* test that item is first in list */
+		REQUIRE(l.get_value_at_index(0) == 5);
 	    }
 	}
     
 	WHEN( "an item is removed" )
 	{
-
+		l.insert(5);
 	    // remove an item
-      
+		l.remove_index(0);
+		
 	    THEN( "the list is still empty" )
 	    {
 		// add your REQUIRE statements
+		REQUIRE( l.is_empty() );
+		REQUIRE( l.size() == 0 );
 	    }
 	}
     
@@ -102,7 +108,7 @@ SCENARIO( "Empty lists" )
 	}
     }
 }
-
+#if 0 
 SCENARIO( "Single item lists" )
 {
 
