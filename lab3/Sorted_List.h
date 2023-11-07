@@ -4,7 +4,7 @@
 class Sorted_List
 {
 private:
-    class Link_In_List;
+    class Element;
 public:
     Sorted_List();
     ~Sorted_List();
@@ -17,25 +17,23 @@ public:
     void remove_index(int index);
 
 private:
-    Link_In_List* first;
+    Element* first;
 
-    class Link_In_List
+    class Element
     {
         public:
 
         int value;
-        Link_In_List* next;
+        Element* next;
 
-        Link_In_List(int value, Link_In_List* next);
-        ~Link_In_List();
+        Element(int value, Element* next);
+        ~Element();
 
         void insert(int value);
 
         int size(int counter = 1);
 
         int get_value_at_index(int index);
-
-        void remove_index(int index);
 
     };
 

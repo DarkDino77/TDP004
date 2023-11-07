@@ -73,14 +73,15 @@ SCENARIO( "Empty lists" )
 	WHEN( "an item is removed" )
 	{
 		l.insert(5);
+		l.insert(3);
 	    // remove an item
 		l.remove_index(0);
 		
 	    THEN( "the list is still empty" )
 	    {
 		// add your REQUIRE statements
-		REQUIRE( l.is_empty() );
-		REQUIRE( l.size() == 0 );
+		REQUIRE( l.is_empty() == false);
+		REQUIRE( l.size() == 1 );
 	    }
 	}
     

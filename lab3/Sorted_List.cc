@@ -41,7 +41,7 @@ void Sorted_List::insert(int ins_value)
 {
     if (is_empty())
     {
-        first = new Link_In_List(ins_value, nullptr);
+        first = new Element(ins_value, nullptr);
     }
     else
     {
@@ -65,32 +65,62 @@ void Sorted_List::remove_index(int index)
     {
         throw ("This value does not exist");
     }
+    else
+    {
+        Element* current{first};
+        int counter{0};
+        while ((counter < index - 1) && (current -> next != nullptr))
+        {
+            current = current -> next;
+            counter++;
+        }
 
-    first -> remove_index(index);
+        if ((current -> next) == nullptr)
+        {
+            if(size() == 1)
+            {
+                delete (current -> next);
+                first = nullptr;
+            }
+            else
+            {
+                delete (current -> next);
+                (current -> next) = nullptr;
+            }
+            delete current;
+        }
+        else
+        {
+            Element* temp{(current -> next) -> next};
+            ((current -> next) -> next) = nullptr;
+            delete (current -> next);
+            (current -> next) = temp;
+        }
+    }
 }
 
 //-----------------------Private------------------------------------------
 
-//-----------------------Start Link_In_List klass -------------------------
+//-----------------------Start Element klass -------------------------
 //-----------------------Public--------------------------------------------
-Sorted_List::Link_In_List::Link_In_List(int value, Link_In_List* next)
+Sorted_List::Element::Element(int value, Element* next)
 : value{value}, next{next}
 {}
 
-Sorted_List::Link_In_List::~Link_In_List()
+Sorted_List::Element::~Element()
 {
     delete next;
 }
 
-void Sorted_List::Link_In_List::insert(int ins_value)
+void Sorted_List::Element::insert(int ins_value)
 {
     if (next == nullptr)
     {
-        next = new Link_In_List(ins_value, nullptr);
+        next = new Element(ins_value, nullptr);
     }
     else if ((next -> value) > ins_value)
     {
-        Link_In_List* temp = new Link_In_List(ins_value, next);
+        Element* temp = new Element(ins_value, next);
         next = temp;
     }
     else
@@ -99,7 +129,7 @@ void Sorted_List::Link_In_List::insert(int ins_value)
     }
 }
 
-int Sorted_List::Link_In_List::size(int counter)
+int Sorted_List::Element::size(int counter)
 {
     if (next == nullptr)
     {
@@ -112,7 +142,7 @@ int Sorted_List::Link_In_List::size(int counter)
 }
 
 
-int Sorted_List::Link_In_List::get_value_at_index(int index)
+int Sorted_List::Element::get_value_at_index(int index)
 {
     if (index == 0)
     {
@@ -125,21 +155,8 @@ int Sorted_List::Link_In_List::get_value_at_index(int index)
     return next -> get_value_at_index(--index);
 }
 
-void Sorted_List::Link_In_List::remove_index(int index)
-{
-    if (index == 0)
-    {
-        std::cout << "hej" << std::endl;
-        Link_In_List* temp = (next); 
-        std::cout << "hej3" << std::endl;
-        delete next;
-        std::cout << "hej2" << std::endl;
-        next = temp;
-    }
-    else if (next == nullptr)
-    {
-        throw("Index out of bounds");
-    }
-    next -> remove_index(--index);
-}
+//void Sorted_List::Element::remove_index(int index)
+//{
+    
+//}
 //-----------------------Slut Link_In_List klass ------------------------------
