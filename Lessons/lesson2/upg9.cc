@@ -6,7 +6,7 @@ Här är stegen som beskriver vad som händer:
 Antag att ursprunglig länkad lista är:
 
 
-[first] --> [3] --> [5] --> [8] --> [nullptr]
+[first] --> [5] --> [8] --> [9] --> [nullptr]
 
 
 1. "delete first" kommer först att anropa destruktorn för det första elementet (det som "first" pekar på), 
@@ -26,3 +26,45 @@ kommer hela den länkade listan att ha blivit borttagen,
 och minnet som allokerades för elementen kommer att ha frigjorts. 
 Listan kommer att vara tom och "first" kommer att vara en ogiltig pekare (dvs. peka någonstans slumpmässigt).
 */
+
+class Element {
+public:
+
+    Element(Element* next, int value) 
+    : next(next), value(value) 
+    {}
+
+    ~Element()
+    {
+        delete next;
+    }
+
+    Element* next;
+    int value;
+
+};
+
+int main() {
+    // Skapa elementen som pekar på sig själv
+    Element* first = new Element(nullptr, 5);
+    //Skapa pekare som pekar på det första elementet
+    (first -> next) = first;
+    //[first] -> [5 | *this]
+    (first -> next) = new Element(nullptr,9);
+    //[first] -> [5] -> [9 | nullptr]
+    //----------------UPG4-------------------
+    Element* temp = (first -> next);
+    first -> next = new Element(temp, 8);
+     //[first] -> [5] -> [8] -> [9 | nullptr]
+
+    delete first;
+    
+    /*
+                 [First] -> [5| ] -> [8| ] -> [9|\]
+    Delete order:             3        2        1
+    
+    Note: First pointer is never deleted.
+    */
+    
+    return 0;
+}

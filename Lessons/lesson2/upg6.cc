@@ -2,6 +2,64 @@
 
 class Element {
 public:
+
+    Element(Element* next, int value) 
+    : next(next), value(value) 
+    {}
+
+    Element* next;
+    int value;
+
+};
+
+// Rekursiv funktion för att hitta det sista elementet
+Element* findLastElement(Element* current) {
+    // Basfall: Om det nuvarande elementet är nullptr, är det sista elementet
+    if (current == nullptr) {
+        return nullptr;
+    }
+
+    // Rekursivt steg: Gå vidare till nästa element
+    if (current->next == nullptr) {
+        // Om nästa element är nullptr, innebär det att det nuvarande elementet är det sista
+        return current;
+    }
+
+    // Annars, fortsätt rekursionen till nästa element
+    return findLastElement(current->next);
+}
+
+int main() {
+    // Skapa elementen som pekar på sig själv
+    Element* first = new Element(nullptr, 5);
+    //Skapa pekare som pekar på det första elementet
+    (first -> next) = first;
+    //[first] -> [5 | *this]
+    (first -> next) = new Element(nullptr,9);
+    //[first] -> [5] -> [9 | nullptr]
+    //----------------UPG4-------------------
+    Element* temp = (first -> next);
+    first -> next = new Element(temp, 8);
+     //[first] -> [5] -> [8] -> [9 | nullptr]
+
+    Element* last = findLastElement(first);
+
+    // "last" kommer nu att peka på det sista elementet
+
+    // Skriv ut värdet på det sista elementet
+    if (last != nullptr) {
+        std::cout << "Det sista elementet har value: " << last->value << std::endl;
+    } else {
+        std::cout << "Listan är tom." << std::endl;
+    }
+    
+    return 0;
+}
+
+/*#include <iostream>
+
+class Element {
+public:
     Element* next;
     int value;
 
@@ -53,7 +111,8 @@ int main() {
 
     return 0;
 }
-/*
+*/
+
 
 /*
 I den här koden används en rekursiv funktion findLastElement för att hitta det sista elementet i listan. 
