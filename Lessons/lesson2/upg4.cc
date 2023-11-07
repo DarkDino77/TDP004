@@ -19,8 +19,7 @@ int main() {
     (first -> next) = new Element(nullptr,9);
     //[first] -> [5] -> [9 | nullptr]
     //----------------UPG4-------------------
-    Element* temp = (first -> next);
-    first -> next = new Element(temp, 8);
+    first -> next = new Element((first -> next), 8);
      //[first] -> [5] -> [8] -> [9 | nullptr]
     
     return 0;

@@ -22,6 +22,10 @@ int main() {
     //[first] -> [10 | nullptr]
     (*first->next).next->value = 10;
     (*first->next).next->next = nullptr;
+    
+    // Det övre kan skrivas om som detta 
+    first -> value = 10;
+    first -> next = nullptr;
 
     return 0;
 }
