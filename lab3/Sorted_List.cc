@@ -14,8 +14,15 @@ Sorted_List::~Sorted_List()
 {
     delete first;
 }
+
+// kopiering konstruktor
+Sorted_List::Sorted_List(Sorted_List const& other)
+{
+    *this = other;
+}
+
 //
-bool Sorted_List::is_empty()
+bool Sorted_List::is_empty() const
 {
     if (first == nullptr)
     {
@@ -97,6 +104,29 @@ void Sorted_List::remove_index(int index)
             (current -> next) = temp;
         }
     }
+}
+
+Sorted_List& Sorted_List::operator=(Sorted_List const& l)
+{
+    if (this != &l)
+    {
+        if (first)
+        {
+            delete first;
+        }
+
+        first = nullptr;
+
+        Element* current {l.first};
+
+        while (current && current -> next != nullptr)
+        {
+            insert(current -> value);
+            current = current -> next;
+        }
+    }
+    
+    return *this;
 }
 
 //-----------------------Private------------------------------------------

@@ -73,15 +73,14 @@ SCENARIO( "Empty lists" )
 	WHEN( "an item is removed" )
 	{
 		l.insert(5);
-		l.insert(3);
 	    // remove an item
 		l.remove_index(0);
 		
 	    THEN( "the list is still empty" )
 	    {
 		// add your REQUIRE statements
-		REQUIRE( l.is_empty() == false);
-		REQUIRE( l.size() == 1 );
+		REQUIRE( l.is_empty() == true);
+		REQUIRE( l.size() == 0 );
 	    }
 	}
     
@@ -89,10 +88,13 @@ SCENARIO( "Empty lists" )
 	{
 
 	    // copy your list to a new variable (copy constructor)
+		Sorted_List new_list{l};
       
 	    THEN( "the new list is also empty" )
 	    {
 		// add your REQUIRE statements
+		REQUIRE( new_list.is_empty() );
+		REQUIRE( new_list.size() == 0 );
 	    }
 	}
     
