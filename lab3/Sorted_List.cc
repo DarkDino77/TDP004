@@ -17,7 +17,8 @@ Sorted_List::~Sorted_List()
 
 // kopiering konstruktor
 Sorted_List::Sorted_List(Sorted_List const& other)
-{
+{   
+    first = nullptr;
     *this = other;
 }
 
@@ -32,7 +33,7 @@ bool Sorted_List::is_empty() const
     return false;
 }
 
-int Sorted_List::size()
+int Sorted_List::size() const
 {
     if (is_empty())
     {
@@ -50,13 +51,22 @@ void Sorted_List::insert(int ins_value)
     {
         first = new Element(ins_value, nullptr);
     }
+    else if((first -> value) > ins_value)
+    {
+        first = new Element(ins_value, first);
+    }
+    else if (first -> next == nullptr)
+    {
+        first -> next = new Element(ins_value, nullptr);
+    }    
     else
     {
         first -> insert(ins_value);
     }
+    
 }
 
-int Sorted_List::get_value_at_index(int index)
+int Sorted_List::get_value_at_index(int index) const
 {
     if (is_empty())
     {
@@ -71,6 +81,21 @@ void Sorted_List::remove_index(int index)
     if (is_empty())
     {
         throw ("This value does not exist");
+    }
+    else if (index == 0)
+    {
+        if (first -> next == nullptr)
+        {
+            delete first;
+            first = nullptr;
+        }
+        else
+        {
+            Element* temp_pointer{first -> next};
+            first -> next = nullptr;
+            delete first;
+            first = temp_pointer;
+        }
     }
     else
     {
@@ -108,27 +133,54 @@ void Sorted_List::remove_index(int index)
 
 Sorted_List& Sorted_List::operator=(Sorted_List const& l)
 {
+    
     if (this != &l)
     {
         if (first)
         {
             delete first;
         }
-
         first = nullptr;
 
         Element* current {l.first};
 
-        while (current && current -> next != nullptr)
+        if (current != nullptr)
         {
-            insert(current -> value);
-            current = current -> next;
-        }
+            do
+            {
+                insert(current -> value);
+                current = current -> next;
+            }
+            while ((current != nullptr) && ((current -> next) != nullptr));
+
+            // This if-statement makes sure that the last element inserts its value into target 
+            // if the list is larger than size 1
+            if ((current != nullptr) && ((current -> next) == nullptr))
+            {
+                insert(current -> value);
+            }
+        }   
     }
     
     return *this;
 }
 
+void Sorted_List::print_list() const
+{
+    std::cout << "List: [";
+    for(int i = 0; i < size() ; i++){
+        if(i != size()-1)
+        {
+            std::cout << get_value_at_index(i) << ", ";
+        }
+        else
+        {
+            std::cout << get_value_at_index(i) << "";
+        }
+    }
+
+    std::cout << "]" << std::endl;
+}
 //-----------------------Private------------------------------------------
 
 //-----------------------Start Element klass -------------------------

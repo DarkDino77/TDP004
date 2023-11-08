@@ -12,14 +12,16 @@ public:
     Sorted_List(Sorted_List const& other);
 
     bool is_empty() const;
-    int size();
+    int size() const;
     void insert(int ins_value);
-    int get_value_at_index(int index);
+    int get_value_at_index(int index) const;
 
     void remove_index(int index);
 
     Sorted_List& operator=(Sorted_List const& l);
     
+    void print_list() const;
+
 
 private:
     Element* first;
