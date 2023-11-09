@@ -6,20 +6,28 @@ class Sorted_List
 private:
     class Element;
 public:
-    
+    //default construktors
     Sorted_List();
     ~Sorted_List();
     Sorted_List(Sorted_List const& other);
+    Sorted_List(Sorted_List && other);
+
+    Sorted_List& operator=(Sorted_List const& other);
+    Sorted_List& operator=(Sorted_List && other);
+    
 
     bool is_empty() const;
+
     int size() const;
+
     void insert(int ins_value);
+
     int get_value_at_index(int index) const;
 
     void remove_index(int index);
 
-    Sorted_List& operator=(Sorted_List const& l);
-    
+    std::string to_string() const;
+
     void print_list() const;
 
 

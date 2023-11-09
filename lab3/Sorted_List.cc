@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "Sorted_List.h"
 
@@ -20,6 +21,66 @@ Sorted_List::Sorted_List(Sorted_List const& other)
 {   
     first = nullptr;
     *this = other;
+}
+
+// flyttkonstruktor
+Sorted_List::Sorted_List(Sorted_List && other)
+{
+    first = nullptr;
+    *this = other;
+
+}
+
+// koperings operator
+Sorted_List& Sorted_List::operator=(Sorted_List const& other) 
+{
+    
+    if (this != &other)
+    {
+        if (first)
+        {
+            delete first;
+        }
+        first = nullptr;
+
+        Element* current {other.first};
+
+        if (current != nullptr)
+        {
+            do
+            {
+                insert(current -> value);
+                current = current -> next;
+            }
+            while ((current != nullptr) && ((current -> next) != nullptr));
+
+            // This if-statement makes sure that the last element inserts its value into target 
+            // if the list is larger than size 1
+            if ((current != nullptr) && ((current -> next) == nullptr))
+            {
+                insert(current -> value);
+            }
+        }   
+    }
+    
+    return *this;
+}
+
+// Flyttoperator
+Sorted_List& Sorted_List::operator=(Sorted_List && other)
+{
+    if (this != &other)
+    {
+        if (first != nullptr)
+        {
+            delete first;
+        }
+        
+        first = other.first;
+        other.first = nullptr;
+    }
+
+    return *this;
 }
 
 //
@@ -70,7 +131,8 @@ int Sorted_List::get_value_at_index(int index) const
 {
     if (is_empty())
     {
-        throw ("This value does not exist");
+        // Insted of throwing we return -1
+        return -1;
     }
 
     return first -> get_value_at_index(index);
@@ -78,109 +140,86 @@ int Sorted_List::get_value_at_index(int index) const
 
 void Sorted_List::remove_index(int index)
 {
-    if (is_empty())
+    if (!is_empty())
     {
-        throw ("This value does not exist");
-    }
-    else if (index == 0)
-    {
-        if (first -> next == nullptr)
+        if (index == 0)
         {
-            delete first;
-            first = nullptr;
-        }
-        else
-        {
-            Element* temp_pointer{first -> next};
-            first -> next = nullptr;
-            delete first;
-            first = temp_pointer;
-        }
-    }
-    else
-    {
-        Element* current{first};
-        int counter{0};
-        while ((counter < index - 1) && (current -> next != nullptr))
-        {
-            current = current -> next;
-            counter++;
-        }
-
-        if ((current -> next) == nullptr)
-        {
-            if(size() == 1)
+            if (first -> next == nullptr)
             {
-                delete (current -> next);
+                delete first;
                 first = nullptr;
             }
             else
             {
-                delete (current -> next);
-                (current -> next) = nullptr;
+                Element* temp_pointer{first -> next};
+                first -> next = nullptr;
+                delete first;
+                first = temp_pointer;
             }
-            delete current;
         }
         else
         {
-            Element* temp{(current -> next) -> next};
-            ((current -> next) -> next) = nullptr;
-            delete (current -> next);
-            (current -> next) = temp;
+            Element* current{first};
+            int counter{0};
+            while ((counter < index - 1) && (current -> next != nullptr))
+            {
+                current = current -> next;
+                counter++;
+            }
+
+            if ((current -> next) == nullptr)
+            {
+                if(size() == 1)
+                {
+                    delete (current -> next);
+                    first = nullptr;
+                }
+                else
+                {
+                    delete (current -> next);
+                    (current -> next) = nullptr;
+                }
+                delete current;
+            }
+            else
+            {
+                Element* temp{(current -> next) -> next};
+                ((current -> next) -> next) = nullptr;
+                delete (current -> next);
+                (current -> next) = temp;
+            }
         }
     }
+    
 }
 
-Sorted_List& Sorted_List::operator=(Sorted_List const& l)
+
+std::string Sorted_List::to_string() const
 {
-    
-    if (this != &l)
+    std::string output{"List: ["};
+    if(size() > 0)
     {
-        if (first)
-        {
-            delete first;
+        for(int i = 0; i < size() ; i++){
+            if(i != size()-1)
+            {
+                output += std::to_string(get_value_at_index(i)) += ", ";
+            }
+            else
+            {
+                output += std::to_string(get_value_at_index(i)) += "";
+            }
         }
-        first = nullptr;
-
-        Element* current {l.first};
-
-        if (current != nullptr)
-        {
-            do
-            {
-                insert(current -> value);
-                current = current -> next;
-            }
-            while ((current != nullptr) && ((current -> next) != nullptr));
-
-            // This if-statement makes sure that the last element inserts its value into target 
-            // if the list is larger than size 1
-            if ((current != nullptr) && ((current -> next) == nullptr))
-            {
-                insert(current -> value);
-            }
-        }   
     }
-    
-    return *this;
+
+    output += "]";
+    return output;
 }
 
 void Sorted_List::print_list() const
 {
-    std::cout << "List: [";
-    for(int i = 0; i < size() ; i++){
-        if(i != size()-1)
-        {
-            std::cout << get_value_at_index(i) << ", ";
-        }
-        else
-        {
-            std::cout << get_value_at_index(i) << "";
-        }
-    }
-
-    std::cout << "]" << std::endl;
+    std::cout << to_string() << std::endl;
 }
+
 //-----------------------Private------------------------------------------
 
 //-----------------------Start Element klass -------------------------
@@ -230,15 +269,14 @@ int Sorted_List::Element::get_value_at_index(int index)
     {
         return value;
     }
+
     if (next == nullptr)
     {
-        throw("Index out of bounds");
+        // Insted of throwing we return -1
+        return -1;
     }
+
     return next -> get_value_at_index(--index);
 }
 
-//void Sorted_List::Element::remove_index(int index)
-//{
-    
-//}
 //-----------------------Slut Link_In_List klass ------------------------------

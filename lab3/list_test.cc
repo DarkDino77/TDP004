@@ -43,6 +43,26 @@ TEST_CASE( "Insert an item in an empty list" )
     REQUIRE( l.is_empty() == false);
     REQUIRE( l.size() == 1 );
 }
+
+TEST_CASE( "Print list with one or more items in it" ) 
+{
+    Sorted_List l{};
+    l.insert(5);
+  
+    REQUIRE( l.to_string() == "List: [5]" );
+	l.print_list();
+
+    l.remove_index(0);
+
+    REQUIRE( l.to_string() == "List: []" );
+	l.print_list();
+
+    l.insert(3);
+    l.insert(4);
+
+    REQUIRE( l.to_string() == "List: [3, 4]" );
+	l.print_list();
+}
   
 SCENARIO( "Empty lists" ) 
 {
@@ -439,10 +459,12 @@ SCENARIO( "Lists can be heavily used" )
         }
     }
 }
-#if 0 
+
 Sorted_List trigger_move(Sorted_List l)
 {
-    // do some (any) modification to list
+	l.insert(5);
+	l.insert(9);
+	l.insert(3);
     return l;
 }
 
@@ -451,39 +473,68 @@ SCENARIO( "Lists can be passed to functions" )
 
     GIVEN( "A list with 5 items in it" )
     {
-
-	Sorted_List given{};
-	// insert 5 items
+		Sorted_List given{};
+		given.insert(2);
+		given.insert(4);
+		given.insert(6);
+		given.insert(8);
+		given.insert(10);
   
 	WHEN( "the list is passed to trigger_move()" )
 	{
-
 	    Sorted_List l{ trigger_move(given) };
       
 	    THEN( "the given list remain and the result have the change" )
 	    {
+			REQUIRE(l.get_value_at_index(0) == 2);
+			REQUIRE(l.get_value_at_index(1) == 3);
+			REQUIRE(l.get_value_at_index(2) == 4);
+			REQUIRE(l.get_value_at_index(3) == 5);
+			REQUIRE(l.get_value_at_index(4) == 6);
+			REQUIRE(l.get_value_at_index(5) == 8);
+			REQUIRE(l.get_value_at_index(6) == 9);
+			REQUIRE(l.get_value_at_index(7) == 10);
+			REQUIRE(l.size() == 8);
+
+			REQUIRE(given.get_value_at_index(0) == 2);
+			REQUIRE(given.get_value_at_index(1) == 4);
+			REQUIRE(given.get_value_at_index(2) == 6);
+			REQUIRE(given.get_value_at_index(3) == 8);
+			REQUIRE(given.get_value_at_index(4) == 10);
+			REQUIRE(given.size() == 5);
 	    }
 	}
     }
 }
 
-// In addition you must of course verify that the list is printed
-// correct and that no memory leaks occur during use. You can solve
-// the printing part on your own. Here's how to run the (test) program
-// when you check for memory leaks:
-
-// You must of course verify that no memory leaks occur during use.
-// To do so, an external program must be used to track what memory
-// is allocated and free'd, you can run such a program like so:
-//
-// $ valgrind --tool=memcheck a.out
-
 // Finally you need to check that you can do all operations that make
 // sense also on a immutable list (eg all operations but insert):  
 void use_const_list(Sorted_List const& l)
 {
-    // perform every operation that do not modify the list here
-    return l;
+    l.is_empty();
+    l.size();
+    l.get_value_at_index(0);
+    l.to_string();
+    l.print_list();
 }
 
-#endif
+SCENARIO( "All operations that do not modify the list can be performed on a list" )
+{
+    GIVEN( "A list with five items in it" )
+    {
+        Sorted_List l{};
+        l.insert(2);
+        l.insert(4);
+        l.insert(6);
+        l.insert(8);
+        l.insert(10);
+
+        WHEN( "The list is sent into the modify function" )
+        {
+            THEN( "The list remains unmodified and does not throw any exceptions" )
+            {
+                REQUIRE_NOTHROW(use_const_list(l));
+            }
+        }
+    }
+}
