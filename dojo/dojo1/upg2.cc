@@ -32,14 +32,11 @@ List& List::operator=(List const& other)
 
         Node* current {other.first};
 
-        do
+        while (current != nullptr)
         {
-            insert(current -> value);
-            current = current -> next;
-        }
-        while ((current != nullptr) && ((current -> next) != nullptr));
-
-        insert(current -> value);
+            insert(current->value);
+            current = current->next;
+        }  
     
     return *this;
 }

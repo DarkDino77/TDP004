@@ -13,22 +13,21 @@ Sorted_List::Sorted_List()
 //Destructor
 Sorted_List::~Sorted_List()
 {
-    delete first;
+    clear_list();
 }
 
 // kopiering konstruktor
 Sorted_List::Sorted_List(Sorted_List const& other)
+:first{nullptr}
 {   
-    first = nullptr;
     *this = other;
 }
 
 // flyttkonstruktor
 Sorted_List::Sorted_List(Sorted_List && other)
+:first{nullptr}
 {
-    first = nullptr;
     *this = other;
-
 }
 
 // koperings operator
@@ -37,30 +36,14 @@ Sorted_List& Sorted_List::operator=(Sorted_List const& other)
     
     if (this != &other)
     {
-        if (first)
+        clear_list();
+
+        Element* current{other.first};
+        while (current != nullptr)
         {
-            delete first;
-        }
-        first = nullptr;
-
-        Element* current {other.first};
-
-        if (current != nullptr)
-        {
-            do
-            {
-                insert(current -> value);
-                current = current -> next;
-            }
-            while ((current != nullptr) && ((current -> next) != nullptr));
-
-            // This if-statement makes sure that the last element inserts its value into target 
-            // if the list is larger than size 1
-            if ((current != nullptr) && ((current -> next) == nullptr))
-            {
-                insert(current -> value);
-            }
-        }   
+            insert(current->value);
+            current = current->next;
+        }  
     }
     
     return *this;
@@ -71,10 +54,7 @@ Sorted_List& Sorted_List::operator=(Sorted_List && other)
 {
     if (this != &other)
     {
-        if (first != nullptr)
-        {
-            delete first;
-        }
+        clear_list();
         
         first = other.first;
         other.first = nullptr;
@@ -86,12 +66,7 @@ Sorted_List& Sorted_List::operator=(Sorted_List && other)
 //
 bool Sorted_List::is_empty() const
 {
-    if (first == nullptr)
-    {
-        return true;
-    }
-    
-    return false;
+    return first == nullptr;
 }
 
 int Sorted_List::size() const
@@ -108,23 +83,14 @@ int Sorted_List::size() const
 
 void Sorted_List::insert(int ins_value)
 {
-    if (is_empty())
-    {
-        first = new Element(ins_value, nullptr);
-    }
-    else if((first -> value) > ins_value)
+    if (is_empty() || first->value > ins_value)
     {
         first = new Element(ins_value, first);
     }
-    else if (first -> next == nullptr)
-    {
-        first -> next = new Element(ins_value, nullptr);
-    }    
     else
     {
-        first -> insert(ins_value);
+        first->insert(ins_value);
     }
-    
 }
 
 int Sorted_List::get_value_at_index(int index) const
@@ -146,15 +112,11 @@ void Sorted_List::remove_index(int index)
         {
             if (first -> next == nullptr)
             {
-                delete first;
-                first = nullptr;
+                clear_list();
             }
             else
             {
-                Element* temp_pointer{first -> next};
-                first -> next = nullptr;
-                delete first;
-                first = temp_pointer;
+               remove_and_join(first);
             }
         }
         else
@@ -179,18 +141,13 @@ void Sorted_List::remove_index(int index)
                     delete (current -> next);
                     (current -> next) = nullptr;
                 }
-                delete current;
             }
             else
             {
-                Element* temp{(current -> next) -> next};
-                ((current -> next) -> next) = nullptr;
-                delete (current -> next);
-                (current -> next) = temp;
+               remove_and_join(current->next);
             }
         }
-    }
-    
+    } 
 }
 
 
@@ -220,10 +177,25 @@ void Sorted_List::print_list() const
     std::cout << to_string() << std::endl;
 }
 
-//-----------------------Private------------------------------------------
+void Sorted_List::clear_list()
+{
+    delete first;
+    first = nullptr;
+}
 
-//-----------------------Start Element klass -------------------------
-//-----------------------Public--------------------------------------------
+// --- Private ---
+
+void Sorted_List::remove_and_join(Element* &from)
+{
+    Element* temp_pointer{from -> next};
+    from -> next = nullptr;
+    delete from;
+    from = temp_pointer;
+}
+
+// ╰> --- Element ---
+//    ╰> --- public ---
+
 Sorted_List::Element::Element(int value, Element* next)
 : value{value}, next{next}
 {}
@@ -235,14 +207,9 @@ Sorted_List::Element::~Element()
 
 void Sorted_List::Element::insert(int ins_value)
 {
-    if (next == nullptr)
+    if (next == nullptr || next -> value > ins_value)
     {
-        next = new Element(ins_value, nullptr);
-    }
-    else if ((next -> value) > ins_value)
-    {
-        Element* temp = new Element(ins_value, next);
-        next = temp;
+        next = new Element(ins_value, next);
     }
     else
     {
@@ -278,5 +245,3 @@ int Sorted_List::Element::get_value_at_index(int index)
 
     return next -> get_value_at_index(--index);
 }
-
-//-----------------------Slut Link_In_List klass ------------------------------
