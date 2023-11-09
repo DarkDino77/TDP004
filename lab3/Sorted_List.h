@@ -30,9 +30,12 @@ public:
 
     void print_list() const;
 
+    void clear_list();
+
 
 private:
     Element* first;
+    void remove_and_join(Element* &from);
 
     class Element
     {
