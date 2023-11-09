@@ -1,0 +1,28 @@
+// Komplettering: duplicering av kod i funktionen to_string.
+
+// Komplettering: Kalla inte på operatorer explicit såsom operator++()
+
+// Komplettering: operator>> ska aldrig kasta ett undantag. Den sätter endast sin failbit. 
+
+// Komplettering: När ni tester era strömoperatorer så kontrollerar ni aldrig om operator>> faktiskt har satt failflaggan på strömmer. Då den påverkar strömmer som skickats in som en referens, dvs den påverkar strömmer även utanför er operator, så bör ni kontrollera att beteendet är som förväntat i era tester. 
+
+// Komplettering: Om ni ska kasta undantag så bör ni kasta ett passande undantag istället för en sträng. Ni behöver inte kasta undantag alls i den här labben dock. Ni borde inte ha setters publika om ni tar bort felhantering.
+
+// Komplettering: När ni definierar konstruktorn vill vi att ni använder medlemsinitieringslistan i så stor utsträckning som möjligt istället för att tilldela medlemsvariablerna i konstruktorns funktionskropp. 
+
+// Komplettering: Det är snyggt att ni brutit ut funktionalitet för att konvertera tiden till sekunder till en funktion 
+// och återanvänt den för att implementera jämförelseoperatorn. Det gör implementationen av operatorerna trivial för ni då använder jämförelsen i int typen. 
+// Det hade dock varit ännu bättre om ni använde den funktionen för att implementera tex operator< och sedan i sin tur använde operator< 
+// för att implementera resterande. 
+// Då beror inte alla jämförelseoperatorernas funktionalitet kopplat till get_time_seconds lika mycket och det skulle vara enklare att ändra 
+// funktionaliteten i ett senare skede då man endast måste ändra i en operator istället för i alla.
+
+// Komplettering: Testerna för operator++ och operator-- testar inte skillnaden på postfix och prefix 
+
+// Komplettering: Deklarera medlemsfunktioner som inte ändrar på objektets medlemsvariabler som const för att de ska gå att använda med const versioner av objektet. 
+
+// Komplettering: Saknar include för string i h-filen <--
+
+// Komplettering: Normalt sett brukar inläsningsoperatorer (endast) läsa så långt som krävs innan ett fel markeras och inläsningen avslutas, men ni väljer själva hur långt ni läser så länge det är väl dokumenterat (skriv en kommentar). <-
+
+// Komplettering: Ni saknar en funktion is_valid som returnera true om tiden är valid. Ni behöver inte kolla att objektet initieras med en valid tid i denna labb. <-
