@@ -75,18 +75,19 @@ int main2()
     Iterativt: current och to_current kopia
 
     Rekursivt: to = from -> copy();
-                    node* copy()
-                    {
-                        if (next != nullptr)
-                        {
-                            Node* tmp{new Node{value, next -> copy()}}
-                            return tmp;
-                        }
-                        else
-                        {
-                            tmp{new Node{value,nullptr}};
-                            return tmp;
-                        }
+    
+    node* copy()
+    {
+        if (next != nullptr)
+        {
+            Node* tmp{new Node{value, next -> copy()}}
+            return tmp;
+        }
+        else
+        {
+            tmp{new Node{value,nullptr}};
+            return tmp;
+        }
                       
     }
     */
