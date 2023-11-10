@@ -15,22 +15,20 @@ Time::Time(int hh, int mm, int ss)
 // Convert a Time object to a formatted string- hh:mm:ss
 std::string Time::to_string(bool am_pm) const
 {
-    std::string ss{Time::time_formatter(second)};
-    std::string mm{Time::time_formatter(minute)};
     std::string hh{};
     std::string am_pm_string{"am"};
 
     if (am_pm && hour > 12)
     {
-        hh = Time::time_formatter(hour - 12);
+        hh = time_formatter(hour - 12);
         am_pm_string = "pm";
     }
     else
     {
-        hh = Time::time_formatter(hour);
+        hh = time_formatter(hour);
     }
     
-    return hh + ":" + mm + ":" + ss + ((am_pm) ? " " + am_pm_string : "");
+    return hh + ":" + time_formatter(minute) + ":" + time_formatter(second) + ((am_pm) ? " " + am_pm_string : "");
 }
 
 // Addtion operators
@@ -39,17 +37,17 @@ Time Time::operator+(int const value) const
     Time new_time{*this};
     if (value < 0)
     {
-        new_time.Time::subtract_seconds(-value);
+        new_time.subtract_seconds(-value);
         return new_time;    
     }
 
-    new_time.Time::add_seconds(value);
+    new_time.add_seconds(value);
     return new_time;
 }
 
 Time& Time::operator++()
 {
-    Time::add_seconds(1);
+    add_seconds(1);
     return *this;
 }
 
@@ -57,7 +55,7 @@ Time Time::operator++(int)
 {
     Time new_time{*this};
     ++*this;
-    return new_time;operator++();
+    return new_time;
 }
 
 // Subtraction operators
@@ -66,17 +64,17 @@ Time Time::operator-(int const value) const
     Time new_time{*this};
     if (value < 0)
     {
-        new_time.Time::add_seconds(-value);
+        new_time.add_seconds(-value);
         return new_time;    
     }
 
-    new_time.Time::subtract_seconds(value);
+    new_time.subtract_seconds(value);
     return new_time;
 }
 
 Time& Time::operator--()
 {
-    Time::subtract_seconds(1);
+    subtract_seconds(1);
     return *this;
 }
 
@@ -90,7 +88,7 @@ Time Time::operator--(int)
 // Comparison operators
 bool Time::operator==(Time const &compare) const
 {
-    if (Time::time_as_seconds() == compare.Time::time_as_seconds())
+    if (time_as_seconds() == compare.time_as_seconds())
     {
         return true;
     }
@@ -110,7 +108,7 @@ bool Time::operator!=(Time const &compare) const
 
 bool Time::operator>(Time const &compare) const
 {
-    if (Time::time_as_seconds() > compare.Time::time_as_seconds())
+    if (time_as_seconds() > compare.time_as_seconds())
     {
         return true;
     }
@@ -178,7 +176,7 @@ void Time::add_minute()
     if (minute > 59)
     {
         minute = 0;
-        Time::add_hour();
+        add_hour();
     }
 }
 
@@ -190,7 +188,7 @@ void Time::add_seconds(int value)
         if (second > 59)
         {
             second = 0;
-            Time::add_minute();
+            add_minute();
         }
 
         value--;
@@ -213,7 +211,7 @@ void Time::subtract_minute()
     if (minute < 0)
     {
         minute = 59;
-        Time::subtract_hour();
+        subtract_hour();
     }
 }
 
@@ -225,7 +223,7 @@ void Time::subtract_seconds(int value)
         if (second < 0)
         {
             second = 59;
-            Time::subtract_minute();
+            subtract_minute();
         }
 
         value--;
