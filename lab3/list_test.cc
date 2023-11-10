@@ -1,20 +1,9 @@
-// This test program uses a test framework supporting TDD and BDD.
-// You are not required to use the framework, but encouraged to.
-// Documentation:
-// https://github.com/philsquared/Catch/blob/master/docs/tutorial.md
+#include <random>
+#include <iostream>
 
-// Note that the testcases outline here serve simply as inspiration
-// you are not required to implement these tests, but you need to
-// create tests for your list, so it might be a good idea to use
-// these tests as a basis.
-
-// This define lets Catch create the main test program
-// (Must be in only one place!)
 #include "catch.hpp"
 #include "Sorted_List.h"
 
-#include <random>
-#include <iostream>
 
 //=======================================================================
 // Test cases
@@ -25,14 +14,7 @@ TEST_CASE( "Create an empty list" )
     Sorted_List l{};
     REQUIRE( l.is_empty() );
     REQUIRE( l.size() == 0 );
-}
-
-// Solve one TEST_CASE or WHEN at a time!
-//
-// Move this comment and following #if 0 down one case at a time!
-// Make sure to close any open braces before this comment.
-// The #if 0 will disable the rest of the file.
- 
+} 
 
 TEST_CASE( "Insert an item in an empty list" ) 
 {
@@ -66,72 +48,71 @@ TEST_CASE( "Print list with one or more items in it" )
   
 SCENARIO( "Empty lists" ) 
 {
-  
     GIVEN( "An empty list" ) 
     {
-	Sorted_List l{};
+		Sorted_List l{};
 
-	REQUIRE( l.is_empty() );
-	REQUIRE( l.size() == 0 );
-
-	WHEN( "an item is inserted" )
-	{
-
-	    // insert an item
-		l.insert(5);
-
-	    THEN( "the size increase and the item is first in the list" )
-	    {
-		REQUIRE( l.is_empty() == false );
-		REQUIRE( l.size() == 1 );
-		/* test that item is first in list */
-		REQUIRE(l.get_value_at_index(0) == 5);
-	    }
-	}
-    
-	WHEN( "an item is removed" )
-	{
-		l.insert(5);
-	    // remove an item
-		l.remove_index(0);
-		
-	    THEN( "the list is still empty" )
-	    {
-		// add your REQUIRE statements
-		REQUIRE( l.is_empty() == true);
+		REQUIRE( l.is_empty() );
 		REQUIRE( l.size() == 0 );
-	    }
-	}
-    
-	WHEN( "the list is copied to a new list" )
-	{
-	    // copy your list to a new variable (copy constructor)
-		Sorted_List new_list{l};
-      
-	    THEN( "the new list is also empty" )
-	    {
-		// add your REQUIRE statements
-		REQUIRE( new_list.is_empty() );
-		REQUIRE( new_list.size() == 0 );
-	    }
-	}
-    
-	WHEN( "the list is copied to an existing non-empty list" )
-	{
-	    // create and fill a list to act as the existing list
-	    // copy (assign) your empty list to the existing
-		Sorted_List new_list{};
-		l.insert(5);
 
-		l = new_list;
-      
-	    THEN( "the existing list is also empty" )
-	    {
-		// add your REQUIRE statements
-		REQUIRE(l.is_empty());
-		REQUIRE(l.size() == 0);
-	    }
-	}
+		WHEN( "an item is inserted" )
+		{
+			// insert an item
+			l.insert(5);
+
+			THEN( "the size increase and the item is first in the list" )
+			{
+			REQUIRE( l.is_empty() == false );
+			REQUIRE( l.size() == 1 );
+			/* test that item is first in list */
+			REQUIRE(l.get_value_at_index(0) == 5);
+			}
+		}
+    
+		WHEN( "an item is removed" )
+		{
+			l.insert(5);
+			// remove an item
+			l.remove_index(0);
+
+			
+			THEN( "the list is still empty" )
+			{
+			// add your REQUIRE statements
+			REQUIRE( l.is_empty() == true);
+			REQUIRE( l.size() == 0 );
+			}
+		}
+    
+		WHEN( "the list is copied to a new list" )
+		{
+			// copy your list to a new variable (copy constructor)
+			Sorted_List new_list{l};
+		
+			THEN( "the new list is also empty" )
+			{
+			// add your REQUIRE statements
+			REQUIRE( new_list.is_empty() );
+			REQUIRE( new_list.size() == 0 );
+			}
+		}
+    
+		WHEN( "the list is copied to an existing non-empty list" )
+		{
+			// create and fill a list to act as the existing list
+			// copy (assign) your empty list to the existing
+			Sorted_List new_list{};
+			l.insert(5);
+
+			l = new_list;
+		
+			THEN( "the existing list is also empty" )
+			{
+			// add your REQUIRE statements
+			REQUIRE(l.is_empty());
+			REQUIRE(l.size() == 0);
+			}
+		}
     }
 }
 SCENARIO( "Single item lists" )
@@ -141,63 +122,67 @@ SCENARIO( "Single item lists" )
         Sorted_List l{};
         l.insert(5);
     
-    WHEN( "a smaller item is inserted" )
-    {
-        l.insert(3);
+		WHEN( "a smaller item is inserted" )
+		{
+			l.insert(3);
 
-        THEN( "The smaller item is inserted before the first item" )
-        {
-            REQUIRE(l.get_value_at_index(0) == 3);
-            REQUIRE(l.get_value_at_index(1) == 5);
-            REQUIRE(l.size() == 2);
-        }
-    }
-    WHEN( "a larger item is inserted" )
-    {
-        l.insert(7);
-        THEN( "The larger item is inserted after the first item" )
-        {
-            REQUIRE(l.get_value_at_index(0) == 5);
-            REQUIRE(l.get_value_at_index(1) == 7);
-            REQUIRE(l.size() == 2);
-        }
-    }
-    WHEN( "an item is removed" )
-    {
-        l.insert(2);
-        l.remove_index(0);
+			THEN( "The smaller item is inserted before the first item" )
+			{
+				REQUIRE(l.get_value_at_index(0) == 3);
+				REQUIRE(l.get_value_at_index(1) == 5);
+				REQUIRE(l.size() == 2);
+			}
+		}
 
-        THEN( "The first item is removed" )
-        {
-            REQUIRE(l.get_value_at_index(0) == 5);
-            REQUIRE(l.size() == 1);
-        }
-    }
-    WHEN( "the list is copied to a new list" )
-    {
-        Sorted_List new_list{l};
+		WHEN( "a larger item is inserted" )
+		{
+			l.insert(7);
+			THEN( "The larger item is inserted after the first item" )
+			{
+				REQUIRE(l.get_value_at_index(0) == 5);
+				REQUIRE(l.get_value_at_index(1) == 7);
+				REQUIRE(l.size() == 2);
+			}
+		}
 
-        THEN( "The new list now has the same values as the first list" )
-        {
-            REQUIRE(new_list.get_value_at_index(0) == 5);
-            REQUIRE(new_list.size() == 1);
-            REQUIRE(l.get_value_at_index(0) == 5);
-            REQUIRE(l.size() == 1);
-        }
-    }
-    WHEN( "the list is copied to an existing non-empty list" )
-    {
-		Sorted_List new_list{};
-		new_list = l;
+		WHEN( "an item is removed" )
+		{
+			l.insert(2);
+			l.remove_index(0);
 
-        THEN( "The new list now has the same values as the first list" )
-        {
-			REQUIRE(new_list.get_value_at_index(0) == 5);
-            REQUIRE(new_list.size() == 1);
-            REQUIRE(l.get_value_at_index(0) == 5);
-            REQUIRE(l.size() == 1);
-        }
-    }
+			THEN( "The first item is removed" )
+			{
+				REQUIRE(l.get_value_at_index(0) == 5);
+				REQUIRE(l.size() == 1);
+			}
+		}
+
+		WHEN( "the list is copied to a new list" )
+		{
+			Sorted_List new_list{l};
+
+			THEN( "The new list now has the same values as the first list" )
+			{
+				REQUIRE(new_list.get_value_at_index(0) == 5);
+				REQUIRE(new_list.size() == 1);
+				REQUIRE(l.get_value_at_index(0) == 5);
+				REQUIRE(l.size() == 1);
+			}
+		}
+
+		WHEN( "the list is copied to an existing non-empty list" )
+		{
+			Sorted_List new_list{};
+			new_list = l;
+
+			THEN( "The new list now has the same values as the first list" )
+			{
+				REQUIRE(new_list.get_value_at_index(0) == 5);
+				REQUIRE(new_list.size() == 1);
+				REQUIRE(l.get_value_at_index(0) == 5);
+				REQUIRE(l.size() == 1);
+			}
+		}
     }
 }
 
@@ -228,6 +213,7 @@ SCENARIO( "Multi-item lists" )
 				REQUIRE(l.size() == 6);
 			}			
 		}
+
 		WHEN( "an item larger than all other is inserted" )
 		{
 			l.insert(11);
@@ -242,6 +228,7 @@ SCENARIO( "Multi-item lists" )
 				REQUIRE(l.size() == 6);
 			}	
 		}
+
 		WHEN( "an item smaller than all but one item is inserted" )
 		{
 			l.insert(3);
@@ -256,6 +243,7 @@ SCENARIO( "Multi-item lists" )
 				REQUIRE(l.size() == 6);
 			}	
 		}
+
 		WHEN( "an item larger than all but one item is inserted" )
 		{
 			l.insert(9);
@@ -270,6 +258,7 @@ SCENARIO( "Multi-item lists" )
 				REQUIRE(l.size() == 6);
 			}
 		}
+
 		WHEN( "an item is removed" )
 		{
 			l.remove_index(0);
@@ -282,6 +271,7 @@ SCENARIO( "Multi-item lists" )
 				REQUIRE(l.size() == 4);
 			}
 		}
+
 		WHEN( "all items are removed" )
 		{
 			l.remove_index(4);
@@ -296,6 +286,7 @@ SCENARIO( "Multi-item lists" )
 				REQUIRE(l.is_empty());
 			}
 		}
+
 		WHEN( "the list is copied to a new list" )
 		{
 			Sorted_List new_list{l};
@@ -316,6 +307,7 @@ SCENARIO( "Multi-item lists" )
 				REQUIRE(l.size() == 5);
 			}
 		}
+		
 		WHEN( "the list is copied to an existing non-empty list" )
 		{
 			Sorted_List new_list{};
@@ -384,6 +376,7 @@ SCENARIO( "Lists can be copied" )
             new_list.remove_index(1);
             new_list.remove_index(0);
             new_list.insert(1);
+			
             THEN( "the original remain unmodified" )
             {
                 REQUIRE(l.get_value_at_index(0) == 2);
@@ -402,7 +395,6 @@ SCENARIO( "Lists can be heavily used" )
 
     GIVEN( "A list with 1000 random items in it" )
     {
-
         Sorted_List l{};
     
         // create the given list with 1000 random items
@@ -480,30 +472,30 @@ SCENARIO( "Lists can be passed to functions" )
 		given.insert(8);
 		given.insert(10);
   
-	WHEN( "the list is passed to trigger_move()" )
-	{
-	    Sorted_List l{ trigger_move(given) };
-      
-	    THEN( "the given list remain and the result have the change" )
-	    {
-			REQUIRE(l.get_value_at_index(0) == 2);
-			REQUIRE(l.get_value_at_index(1) == 3);
-			REQUIRE(l.get_value_at_index(2) == 4);
-			REQUIRE(l.get_value_at_index(3) == 5);
-			REQUIRE(l.get_value_at_index(4) == 6);
-			REQUIRE(l.get_value_at_index(5) == 8);
-			REQUIRE(l.get_value_at_index(6) == 9);
-			REQUIRE(l.get_value_at_index(7) == 10);
-			REQUIRE(l.size() == 8);
+		WHEN( "the list is passed to trigger_move()" )
+		{
+			Sorted_List l{ trigger_move(given) };
+		
+			THEN( "the given list remain and the result have the change" )
+			{
+				REQUIRE(l.get_value_at_index(0) == 2);
+				REQUIRE(l.get_value_at_index(1) == 3);
+				REQUIRE(l.get_value_at_index(2) == 4);
+				REQUIRE(l.get_value_at_index(3) == 5);
+				REQUIRE(l.get_value_at_index(4) == 6);
+				REQUIRE(l.get_value_at_index(5) == 8);
+				REQUIRE(l.get_value_at_index(6) == 9);
+				REQUIRE(l.get_value_at_index(7) == 10);
+				REQUIRE(l.size() == 8);
 
-			REQUIRE(given.get_value_at_index(0) == 2);
-			REQUIRE(given.get_value_at_index(1) == 4);
-			REQUIRE(given.get_value_at_index(2) == 6);
-			REQUIRE(given.get_value_at_index(3) == 8);
-			REQUIRE(given.get_value_at_index(4) == 10);
-			REQUIRE(given.size() == 5);
-	    }
-	}
+				REQUIRE(given.get_value_at_index(0) == 2);
+				REQUIRE(given.get_value_at_index(1) == 4);
+				REQUIRE(given.get_value_at_index(2) == 6);
+				REQUIRE(given.get_value_at_index(3) == 8);
+				REQUIRE(given.get_value_at_index(4) == 10);
+				REQUIRE(given.size() == 5);
+			}
+		}
     }
 }
 
