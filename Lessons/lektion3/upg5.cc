@@ -17,6 +17,12 @@ inte kommer att rensas upp korrekt.
 
 Här är hur du kan lägga till en virtuell destruktor i Menu_Item:
 */
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
 class Menu_Item
 {
 public:
