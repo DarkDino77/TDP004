@@ -1,0 +1,12 @@
+      Race
+     /    \
+ Human    Orc
+     \    /
+    Uruk_Hai
+
+
+class Uruk_Hai : public Human, public Orc
+{
+public:
+  using Human::eat;  // Resolve ambiguity by specifying which eat() to use
+};
