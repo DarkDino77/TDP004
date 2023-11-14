@@ -36,7 +36,7 @@ int main()
     for ( int i{0}; i < v.size(); ++i )
     {
         // cout << v[i].evaluate(5.0, 3.0) << endl;
-        cout << v[i] -> evaluate(5.0, 3.0) << endl;
+        cout << v.at(i) -> evaluate(5.0, 3.0) << endl;
     }
     return 0;
 }
