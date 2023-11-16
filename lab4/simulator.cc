@@ -4,16 +4,16 @@
 
 #include "Circut.h"
 
-void print_labes(std::vector<Component*>& net)
+void print_labes(std::vector<Component*>& circuit)
 {
-    for(Component* component: net)
+    for(Component* component: circuit)
     {
        std::cout << std::right << std::setw(12) << component -> get_name();    
     }
 
     std::cout << std::endl;
 
-    for(int i = 0; i < static_cast<int>(net.size()); i++)
+    for(int i = 0; i < static_cast<int>(circuit.size()); i++) // ska static vara utanför for loopen
     {
         std::cout << " " << std::right << std::setw(5) << "Volt" 
                   << " " << std::right << std::setw(5) << "Curr";    
@@ -21,16 +21,16 @@ void print_labes(std::vector<Component*>& net)
     std::cout << std::endl;
 }
 
-void simulate(std::vector<Component*>& net, 
+void simulate(std::vector<Component*>& circuit, 
          int num_iterations, 
          int num_prints, 
          long double delta_time)
 {
-    print_labes(net);
+    print_labes(circuit);
     for(int i = 0; i <= num_iterations; i++)
     {
         std::string output;
-        for(Component* component: net)
+        for(Component* component: circuit)
         {
             component -> update(delta_time);
             if((i % (num_iterations/num_prints) == 0) and i != 0)
@@ -48,9 +48,9 @@ void simulate(std::vector<Component*>& net,
     std::cout << std::endl;
 }
 
-void clear_net(std::vector<Component*> &net)
+void clear_circuit(std::vector<Component*> &circuit)
 {
-    for(Component* component: net)
+    for(Component* component: circuit)
     {
         delete component;
     }
@@ -58,76 +58,79 @@ void clear_net(std::vector<Component*> &net)
 
 int main(int, char* argv[])
 {
+    // Read varible sent to program
     int num_iterations {std::stoi(argv[1])};
     int num_prints {std::stoi(argv[2])};
     double delta_time{std::stod(argv[3])};
     double bat_volt {std::stod(argv[4])};
 
-    Wire* w1 = new Wire;
-    Wire* w2 = new Wire;
-    Wire* w3 = new Wire;
-    Wire* w4 = new Wire;
+    // First circuit
+    Wire* first_wire {new Wire};
+    Wire* second_wire {new Wire};
+    Wire* third_wire {new Wire};
+    Wire* fourth_wire {new Wire};
     
-    std::vector<Component*> net;
-    net.push_back(new Battery("Bat", bat_volt, w1, w4));
-    net.push_back(new Resistor("R1", 6.0, w2, w1));
-    net.push_back(new Resistor("R2", 4.0, w3, w2));
-    net.push_back(new Resistor("R3", 8.0, w4, w3));
-    net.push_back(new Resistor("R4", 12.0, w4, w2));
-    simulate(net, num_iterations, num_prints, delta_time);
+    std::vector<Component*> first_circuit;
+    first_circuit.push_back(new Battery("Bat", bat_volt, first_wire, fourth_wire));
+    first_circuit.push_back(new Resistor("R1", 6.0, second_wire, first_wire));
+    first_circuit.push_back(new Resistor("R2", 4.0, third_wire, second_wire));
+    first_circuit.push_back(new Resistor("R3", 8.0, fourth_wire, third_wire));
+    first_circuit.push_back(new Resistor("R4", 12.0, fourth_wire, second_wire));
 
-    Wire* p1 = new Wire;
-    Wire* p2 = new Wire;
-    Wire* p3 = new Wire;
-    Wire* p4 = new Wire;
+    simulate(first_circuit, num_iterations, num_prints, delta_time);
+
+    delete first_wire;
+    delete second_wire;
+    delete third_wire;
+    delete fourth_wire;
+
+    clear_circuit(first_circuit);
+
+    // Second circuit 
+    first_wire = new Wire;
+    second_wire = new Wire;
+    third_wire = new Wire;
+    fourth_wire = new Wire;
     
-    std::vector<Component*> netp;
-    netp.push_back(new Battery("Bat", bat_volt, p1, p4));
-    netp.push_back(new Resistor("R1", 150.0, p2, p1));
-    netp.push_back(new Resistor("R2", 50, p3, p1));
-    netp.push_back(new Resistor("R3", 100, p3, p2));
-    netp.push_back(new Resistor("R4", 300, p4, p2));
-    netp.push_back(new Resistor("R5", 250, p4, p3));
+    std::vector<Component*> second_circuit;
+    second_circuit.push_back(new Battery("Bat", bat_volt, first_wire, fourth_wire));
+    second_circuit.push_back(new Resistor("R1", 150.0, second_wire, first_wire));
+    second_circuit.push_back(new Resistor("R2", 50, third_wire, first_wire));
+    second_circuit.push_back(new Resistor("R3", 100, third_wire, second_wire));
+    second_circuit.push_back(new Resistor("R4", 300, fourth_wire, second_wire));
+    second_circuit.push_back(new Resistor("R5", 250, fourth_wire, third_wire));
 
-    simulate(netp, num_iterations, num_prints, delta_time);
+    simulate(second_circuit, num_iterations, num_prints, delta_time);
 
-    Wire* c1 = new Wire;
-    Wire* c2 = new Wire;
-    Wire* c3 = new Wire;
-    Wire* c4 = new Wire;
+    delete first_wire;
+    delete second_wire;
+    delete third_wire;
+    delete fourth_wire;
+
+    clear_circuit(second_circuit);
+
+    //Third circuit
+    first_wire = new Wire;
+    second_wire = new Wire;
+    third_wire = new Wire;
+    fourth_wire = new Wire;
     
-    std::vector<Component*> netc;
-    netc.push_back(new Battery("Bat", bat_volt, c1, c4));
-    netc.push_back(new Resistor("R1", 150.0, c2, c1));
-    netc.push_back(new Resistor("R2", 50, c3, c1));
-    netc.push_back(new Capacitor("C3", 1, c3, c2));
-    netc.push_back(new Resistor("R4", 300, c4, c2));
-    netc.push_back(new Capacitor("C5", 0.75, c4, c3));
+    std::vector<Component*> third_circuit;
+    third_circuit.push_back(new Battery("Bat", bat_volt, first_wire, fourth_wire));
+    third_circuit.push_back(new Resistor("R1", 150.0, second_wire, first_wire));
+    third_circuit.push_back(new Resistor("R2", 50, third_wire, first_wire));
+    third_circuit.push_back(new Capacitor("C3", 1, third_wire, second_wire));
+    third_circuit.push_back(new Resistor("R4", 300, fourth_wire, second_wire));
+    third_circuit.push_back(new Capacitor("C5", 0.75, fourth_wire, third_wire));
 
-    simulate(netc, num_iterations, num_prints, delta_time);
+    simulate(third_circuit, num_iterations, num_prints, delta_time);
 
-    delete w1;
-    delete w2;
-    delete w3;
-    delete w4;
+    delete first_wire;
+    delete second_wire;
+    delete third_wire;
+    delete fourth_wire;
 
-    clear_net(net);
-
-    delete p1;
-    delete p2;
-    delete p3;
-    delete p4;
-
-
-    clear_net(netp);
-
-    delete c1;
-    delete c2;
-    delete c3;
-    delete c4;
-
-
-    clear_net(netc);
+    clear_circuit(third_circuit);
 
     return 0;
 }

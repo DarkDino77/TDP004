@@ -30,6 +30,8 @@ protected:
     std::string name;
     Wire* positive;
     Wire* negative;
+
+    void change_voltage(Wire* positive, Wire* negative, double transfer_voltage);
 };
 
 //---------------------Battery------------------------------

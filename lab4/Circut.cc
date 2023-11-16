@@ -37,6 +37,28 @@ std::string Component::get_name() const
     return name;
 }
 
+void Component::change_voltage(Wire* positive, 
+                               Wire* negative, 
+                               double transfer_voltage)
+{
+    Wire* more_volt;
+    Wire* less_volt;
+    
+    if ((positive -> volt) > (negative -> volt))
+    {
+        more_volt = positive;
+        less_volt = negative;
+    }
+    else
+    {
+        more_volt = negative;
+        less_volt = positive;
+    }
+    
+    (less_volt -> volt) += transfer_voltage;
+    (more_volt -> volt) -= transfer_voltage;
+}
+
 //---------------------Battery------------------------------
 Battery::Battery(std::string name, 
                  double volt, 
@@ -66,24 +88,9 @@ Resistor::Resistor(std::string name,
 
 void Resistor::update(double delta_time)
 {
-    Wire* more_volt;
-    Wire* less_volt;
-    
-    if ((positive -> volt) > (negative -> volt))
-    {
-        more_volt = positive;
-        less_volt = negative;
-    }
-    else
-    {
-        more_volt = negative;
-        less_volt = positive;
-    }
-
     double transfer_voltage{(get_voltage()/resistance) * delta_time};
 
-    (less_volt -> volt) += transfer_voltage;
-    (more_volt -> volt) -= transfer_voltage;
+    change_voltage(positive, negative, transfer_voltage);
 }
 
 double Resistor::get_curret() const
@@ -101,26 +108,11 @@ Capacitor::Capacitor(std::string name,
 
 void Capacitor::update(double delta_time)
 {
-    Wire* more_volt;
-    Wire* less_volt;
-    
-    if ((positive -> volt) > (negative -> volt))
-    {
-        more_volt = positive;
-        less_volt = negative;
-    }
-    else
-    {
-        more_volt = negative;
-        less_volt = positive;
-    }
+    double transfer_voltage{capacitance * (get_voltage() - charge) * delta_time};
 
-    double to_charge{capacitance * (get_voltage() - charge) * delta_time};
+    charge += transfer_voltage;
 
-    charge += to_charge;
-    (less_volt -> volt) += to_charge;
-    (more_volt -> volt) -= to_charge;
-
+    change_voltage(positive, negative, transfer_voltage);
 }
 
 double Capacitor::get_curret() const
