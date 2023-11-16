@@ -21,7 +21,6 @@ private:
     int volt;
     Wire volt_p;
     Wire volt_n;
-
 };
 
 class Resistor: public Component
@@ -62,7 +61,6 @@ int main()
     {
         comp -> update();
     }
-
 
     return 0;
 }
