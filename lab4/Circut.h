@@ -19,10 +19,11 @@ public:
     Component(std::string name, Wire* positive, Wire* negative);
     virtual ~Component() = default;
 
-    virtual void update(double delta_time) = 0;
+    virtual void update(double const delta_time) = 0;
     virtual double get_curret() const = 0 ;
 
-    double get_voltage() const;
+    virtual double get_voltage() const;
+
     std::string to_string() const;
     std::string get_name() const;
 
@@ -31,7 +32,9 @@ protected:
     Wire* positive;
     Wire* negative;
 
-    void change_voltage(Wire* positive, Wire* negative, double transfer_voltage);
+    void change_voltage(Wire* const& positive, 
+                        Wire* const& negative, 
+                        double const transfer_voltage);
 };
 
 //---------------------Battery------------------------------
@@ -40,9 +43,10 @@ class Battery: public Component
 public:
     Battery(std::string name, double volt, Wire* positive, Wire* negative);
     ~Battery() = default;
-    
-    void update(double) override; // testa att sätta den här lika med deafult
+
+    void update(double const) override;
     double get_curret() const override;
+    double get_voltage() const override;
 
 private:
     double volt;
@@ -55,7 +59,7 @@ public:
     Resistor(std::string name, double resistance, Wire* positive, Wire* negative);
     ~Resistor() = default;
 
-    void update(double delta_time) override;
+    void update(double const delta_time) override;
     double get_curret() const override;
 
 private:
@@ -69,7 +73,7 @@ public:
     Capacitor(std::string name, double capacitance, Wire* positive, Wire* negative);
     ~Capacitor() = default;
 
-    void update(double delta_time) override;
+    void update(double const delta_time) override;
     double get_curret() const override;
 
 private:

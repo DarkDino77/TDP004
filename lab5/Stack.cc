@@ -1,38 +1,36 @@
 #include <iostream>
 
-#include "Sorted_List.h"
-
-// Komplettering: Era kopierings samt flytt konstruktorer är ej korrekt implementerade. Ni har korrekt implementering i tilldelningsoperatorerna.
+#include "Stack.h"
 
 // --- Public ---
 
 // Constructor.
-Sorted_List::Sorted_List()
+Stack::Stack()
 :first{nullptr}
 {}
 
 // Destructor.
-Sorted_List::~Sorted_List()
+Stack::~Stack()
 {
     clear_list();
 }
 
 // Copy constructor.
-Sorted_List::Sorted_List(Sorted_List const& other)
+Stack::Stack(Stack const& other)
 :first{nullptr}
 {   
     *this = other;
 }
 
 // Move constructor.
-Sorted_List::Sorted_List(Sorted_List && other)
+Stack::Stack(Stack && other)
 :first{nullptr}
 {
     *this = other;
 }
 
 // Copy operator.
-Sorted_List& Sorted_List::operator=(Sorted_List const& other) 
+Stack& Stack::operator=(Stack const& other) 
 {
     if (this != &other)
     {
@@ -50,7 +48,7 @@ Sorted_List& Sorted_List::operator=(Sorted_List const& other)
 }
 
 // Move operator.
-Sorted_List& Sorted_List::operator=(Sorted_List && other)
+Stack& Stack::operator=(Stack && other)
 {
     if (this != &other)
     {
@@ -64,13 +62,13 @@ Sorted_List& Sorted_List::operator=(Sorted_List && other)
 }
 
 // Check if Sorted List instance is empty.
-bool Sorted_List::is_empty() const
+bool Stack::is_empty() const
 {
     return first == nullptr;
 }
 
 // Recursively counts each element in the list and returns the size.
-int Sorted_List::size() const
+int Stack::size() const
 {
     if (is_empty())
     {
@@ -83,7 +81,7 @@ int Sorted_List::size() const
 }
 
 // Inserts a int value into the beginning of the list.
-void Sorted_List::insert(int const ins_value)
+void Stack::insert(int ins_value)
 {
     if (is_empty() || first->value > ins_value)
     {
@@ -96,7 +94,7 @@ void Sorted_List::insert(int const ins_value)
 }
 
 // Returns the value of the element at the sent in index, if it does not exist, return -1.
-int Sorted_List::get_value_at_index(int const index) const
+int Stack::get_value_at_index(int index) const
 {
     if (is_empty())
     {
@@ -108,7 +106,7 @@ int Sorted_List::get_value_at_index(int const index) const
 }
 
 // Removes the element at the index sent in, if index does not exist- do nothing.
-void Sorted_List::remove_index(int const index)
+void Stack::remove_index(int index)
 {
     if (!is_empty() && index >= 0 && index < size())
     {
@@ -135,7 +133,7 @@ void Sorted_List::remove_index(int const index)
 }
 
 // Returns the list as a string in the format: '[element_1_value, element_2_value, ...]'
-std::string Sorted_List::to_string() const
+std::string Stack::to_string() const
 {
     std::string output{"List: ["};
     if(size() > 0)
@@ -157,13 +155,13 @@ std::string Sorted_List::to_string() const
 }
 
 // Uses to_string function to print the list to the cout.
-void Sorted_List::print_list() const
+void Stack::print_list() const
 {
     std::cout << to_string() << std::endl;
 }
 
 // Clears the entire list and sets first as a nullptr.
-void Sorted_List::clear_list()
+void Stack::clear_list()
 {
     delete first;
     first = nullptr;
@@ -171,14 +169,14 @@ void Sorted_List::clear_list()
 
 // --- Private ---
 // Checks if there is an element after the element that the sent in pointer is pointing to.
-bool Sorted_List::is_next_empty(Element* const& pointer) const
+bool Stack::is_next_empty(Element* pointer)
 {
     return pointer -> next == nullptr;
 }
 
 // Removes the element after the element that the sent in pointer is pointing to. 
 // Redirect the current elements next pointer to the element after the one deleted.
-void Sorted_List::remove_and_join(Element* &from)
+void Stack::remove_and_join(Element* &from)
 {
     Element* temp_pointer{from -> next};
     from -> next = nullptr;
@@ -191,18 +189,18 @@ void Sorted_List::remove_and_join(Element* &from)
 //    ╰> --- public ---
 
 // Element constructor.
-Sorted_List::Element::Element(int value, Element* next)
+Stack::Element::Element(int value, Element* next)
 : value{value}, next{next}
 {}
 
 // Element destructor.
-Sorted_List::Element::~Element()
+Stack::Element::~Element()
 {
     delete next;
 }
 
 // Function used to recursively insert a new element at the correct position.
-void Sorted_List::Element::insert(int const ins_value)
+void Stack::Element::insert(int ins_value)
 {
     if (next == nullptr || next -> value > ins_value)
     {
@@ -215,7 +213,7 @@ void Sorted_List::Element::insert(int const ins_value)
 }
 
 // Function used to recursively count the number of elements in the list.
-int Sorted_List::Element::size(int const counter) const
+int Stack::Element::size(int counter)
 {
     if (next == nullptr)
     {
@@ -223,11 +221,12 @@ int Sorted_List::Element::size(int const counter) const
     }
     else
     {
-        return next -> size(counter + 1);
+        return next -> size(++counter);
     }
 }
+
 // Function used to recursively return the value at the sent in index.
-int Sorted_List::Element::get_value_at_index(int const index) const
+int Stack::Element::get_value_at_index(int index)
 {
     if (index == 0)
     {
@@ -240,5 +239,5 @@ int Sorted_List::Element::get_value_at_index(int const index) const
         return -1;
     }
 
-    return next -> get_value_at_index(index - 1);
+    return next -> get_value_at_index(--index);
 }

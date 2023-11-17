@@ -37,9 +37,9 @@ std::string Component::get_name() const
     return name;
 }
 
-void Component::change_voltage(Wire* positive, 
-                               Wire* negative, 
-                               double transfer_voltage)
+void Component::change_voltage(Wire* const& positive, 
+                               Wire* const& negative, 
+                               double const transfer_voltage)
 {
     Wire* more_volt;
     Wire* less_volt;
@@ -67,15 +67,20 @@ Battery::Battery(std::string name,
 : Component(name, positive, negative), volt{volt}
 {}
 
-void Battery::update(double)
+void Battery::update(double const)
 {
     (positive -> volt) = volt;
-    (negative -> volt) = 0;
+    (negative -> volt) = 0.0;
 }
 
 double Battery::get_curret() const
 {
     return 0;
+}
+
+double Battery::get_voltage() const
+{
+    return volt;
 }
 
 //------------------------Resistor-------------------------------
@@ -86,9 +91,9 @@ Resistor::Resistor(std::string name,
 : Component(name, positive, negative), resistance{resistance}
 {}
 
-void Resistor::update(double delta_time)
+void Resistor::update(double const delta_time)
 {
-    double transfer_voltage{(get_voltage()/resistance) * delta_time};
+    double transfer_voltage{get_curret() * delta_time};
 
     change_voltage(positive, negative, transfer_voltage);
 }
@@ -106,9 +111,9 @@ Capacitor::Capacitor(std::string name,
 : Component(name, positive, negative), capacitance{capacitance}, charge{0}
 {}
 
-void Capacitor::update(double delta_time)
+void Capacitor::update(double const delta_time)
 {
-    double transfer_voltage{capacitance * (get_voltage() - charge) * delta_time};
+    double transfer_voltage{get_curret() * delta_time};
 
     charge += transfer_voltage;
 

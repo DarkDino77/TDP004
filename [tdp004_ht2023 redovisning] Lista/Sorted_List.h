@@ -22,9 +22,9 @@ public:
     
     bool is_empty() const;
     int size() const;
-    void insert(int ins_value);
-    int get_value_at_index(int index) const;
-    void remove_index(int index);
+    void insert(int const ins_value);
+    int get_value_at_index(int const index) const;
+    void remove_index(int const index);
     std::string to_string() const;
     void print_list() const;
     void clear_list();
@@ -33,7 +33,7 @@ private:
     // Variable for Sorted list class
     Element* first;
     
-    bool is_next_empty(Element* pointer);
+    bool is_next_empty(Element* const& pointer) const;
     void remove_and_join(Element* &from);
 
     // Inner class used to represent each link in the list as an element object.
@@ -48,9 +48,9 @@ private:
         Element(int value, Element* next);
         ~Element(); 
 
-        void insert(int value);
-        int size(int counter = 1);
-        int get_value_at_index(int index);
+        void insert(int const value);
+        int size(int const counter = 1) const;
+        int get_value_at_index(int const index) const;
     };
 };
 
