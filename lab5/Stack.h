@@ -3,6 +3,7 @@
 
 #include <string>
 
+template <typename T>
 class Stack
 {
 private:
@@ -11,45 +12,45 @@ public:
     // Constructors
     Stack();
     ~Stack();
-    Stack(Stack const& other);
-    Stack(Stack && other);
+    Stack(Stack<T> const& other);
+    Stack(Stack<T> && other);
 
     // Operator overloads
-    Stack& operator=(Stack const& other);
-    Stack& operator=(Stack && other);
+    Stack<T>& operator=(Stack<T> const& other);
+    Stack<T>& operator=(Stack<T> && other);
     
     bool is_empty() const;
     int size() const;
-    void insert(int ins_value);
-    int get_value_at_index(int index) const;
-    void remove_index(int index);
+    void push(T const ins_value);
+    T get_value_at_index(int const index) const;
+    T pop();
     std::string to_string() const;
     void print_list() const;
     void clear_list();
 
 private:
     // Variable for Sorted list class
-    Element* first;
+    Element* top;
     
-    bool is_next_empty(Element* pointer);
-    void remove_and_join(Element* &from);
+    bool is_next_empty(Element* const& pointer) const;
 
     // Inner class used to represent each link in the list as an element object.
     class Element
     {
     public:
         // Variables for Element class
-        int value;
+        T value;
         Element* next;
 
         // Constructors
-        Element(int value, Element* next);
+        Element(T value, Element* next);
         ~Element(); 
 
-        void insert(int value);
-        int size(int counter = 1);
-        int get_value_at_index(int index);
+        int size(int const counter = 1) const;
+        T get_value_at_index(int const index) const;
+        void copy_helper(Stack & copy_to);
     };
 };
 
+#include "Stack.tcc"
 #endif // STACK_H
