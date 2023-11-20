@@ -25,26 +25,6 @@ TEST_CASE( "push an item in an empty list" )
     REQUIRE( l.is_empty() == false);
     REQUIRE( l.size() == 1 );
 }
-
-TEST_CASE( "print list with one or more items in it" ) 
-{
-    Stack<double> l{};
-    l.push(5);
-  
-    REQUIRE( l.to_string() == "List: [5.000000]" );
-	l.print_list();
-
-    l.pop();
-
-    REQUIRE( l.to_string() == "List: []" );
-	l.print_list();
-
-    l.push(3);
-    l.push(4);
-
-    REQUIRE( l.to_string() == "List: [4.000000, 3.000000]" );
-	l.print_list();
-}
   
 SCENARIO( "Empty lists" ) 
 {
@@ -400,8 +380,6 @@ void use_const_list(Stack<double> const& l)
     l.is_empty();
     l.size();
     l.get_value_at_index(0);
-    l.to_string();
-    l.print_list();
 }
 
 SCENARIO( "All operations that do not modify the list can be performed on a list" )

@@ -52,5 +52,8 @@ private:
     };
 };
 
+template <typename Value_Type, typename List_Type>
+Stack<Value_Type> list_to_stack(List_Type const& other);
+
 #include "Stack.tcc"
 #endif // STACK_H

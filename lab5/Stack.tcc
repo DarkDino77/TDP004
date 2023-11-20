@@ -135,7 +135,7 @@ T Stack<T>::pop()
     }
     return -1;
 }
-
+/*
 // Returns the list as a string in the format: '[element_1_value, element_2_value, ...]'
 template <typename T>
 std::string Stack<T>::to_string() const
@@ -165,7 +165,7 @@ void Stack<T>::print_list() const
 {
     std::cout << to_string() << std::endl;
 }
-
+*/
 // Clears the entire list and sets top as a nullptr.
 template <typename T>
 void Stack<T>::clear_list()
@@ -240,4 +240,17 @@ void Stack<T>::Element::copy_helper(Stack & copy_to)
     }
 
     copy_to.push(value);
+}
+
+
+template <typename Value_Type, typename List_Type>
+Stack<Value_Type> list_to_stack(Value_Type type, List_Type const& other)
+{
+    Stack<Value_Type> new_stack{};
+    for(List_Type item: other)
+    {
+        new_stack.push(item);
+    }
+
+    return new_stack;
 }
