@@ -3,8 +3,6 @@
 #include <string>
 #include "Stack.h"
 
-// Komplettering: Era kopierings samt flytt konstruktorer är ej korrekt implementerade. Ni har korrekt implementering i tilldelningsoperatorerna.
-
 // --- Public ---
 
 // Constructor.
@@ -96,15 +94,13 @@ void Stack<T>::push(T const ins_value)
     top = new Element(ins_value, top);
 }
 
-// Returns the value of the element at the sent in index, if it does not exist, return -1.
+// Returns the value of the element at the sent in index.
 template <typename T>
 T Stack<T>::get_value_at_index(int const index) const
 {
     if (is_empty())
     {
-        // Instead of throwing an exception, we return -1.
-        throw("Error: Invalid index");
-        //return -1;
+        throw std::out_of_range("Error: Invalid index");
     }
 
     return top -> get_value_at_index(index);
@@ -133,9 +129,7 @@ T Stack<T>::pop()
             return return_value;
         }
     }
-    throw("Error: Stack is already empty");
-    //return -1;
-    
+    throw std::out_of_range("Error: The stack is empty");
 }
 
 // Clears the entire list and sets top as a nullptr.
@@ -195,9 +189,7 @@ T Stack<T>::Element::get_value_at_index(int const index) const
 
     if (next == nullptr)
     {
-        // Insted of throwing we return -1
-        throw("Error: Invalid index");
-        //return -1;
+        throw std::out_of_range("Error: Invalid index");
     }
 
     return next -> get_value_at_index(index - 1);
