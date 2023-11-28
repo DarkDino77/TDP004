@@ -1,0 +1,92 @@
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+class GMap
+{
+public:
+    GMap(): start{nullptr} {}
+
+    // -----------------------------------------------------------------------------------------------
+    GMap(GMap const& other) = delete;
+    GMap& operator=(GMap const& other) = delete;
+
+    GMap(GMap&& other)
+    : start{}
+    {
+        std::swap(start, other.start);
+    }
+
+    GMap& operator=(GMap&& other)
+    {
+        std::swap(start, other.start);
+        return *this;
+    }
+
+    ~GMap()
+    {
+        while (start != nullptr)
+        {
+            remove_tile();
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------
+    
+    void add_tile(string name)
+    {
+	    start = new Tile{name, start};
+    }
+
+    void remove_tile()
+    {
+	    Tile* prev = start;
+	    start = start->next;
+	    delete prev;
+    }
+
+    void print() const
+    {
+	    cout << "GMap:\n====\nEND |";
+	    Tile* current = start;
+	    while( current )
+	    {
+	        cout << " <- " << current -> name;
+            current = current -> next;
+	    }
+		cout << " <- | START" << endl;
+    }
+    
+private:
+    struct Tile
+    {
+	    string name;
+	    Tile* next;
+    };
+    Tile* start;
+};
+
+int main()
+{
+    GMap gmap{};
+    gmap.add_tile("a1");
+    gmap.add_tile("c4");
+    gmap.add_tile("m2");
+    gmap.print();
+
+    // För att testa move!
+    GMap g1 {std::move(gmap)};
+    g1.print();
+    gmap.print();
+
+    GMap g2{};
+    g2.add_tile("b7");
+
+    g2 = std::move(g1);
+    g1.print();
+    g2.print();
+    
+    return 0;
+}
+

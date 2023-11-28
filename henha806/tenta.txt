@@ -1,0 +1,7 @@
+* Polymorfi & arv - Brukar vara lägnre än andra uppgifter
+* Minneshantering - copy och move constructor
+* Algoritmer
+* Operatoröverlagring
+
+* Databehålllare
+* Templates

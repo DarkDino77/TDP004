@@ -5,93 +5,8 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-#include <map>
-#include <unordered_map>
 
-void print(std::vector<std::string> const& text)
-{
-    std::for_each(text.begin(), text.end(), 
-                  [](std::string const& word)
-                  {
-                      std::cout << word << " ";
-                  });
-
-    std::cout << std::endl;
-}
-
-void frequency(std::vector<std::string> const& text, bool sort_by_key = false, bool key_align_right = true)
-{
-    std::map<std::string, int> frequency_table{};
-    std::for_each(text.begin(), text.end(), 
-                  [&frequency_table](std::string const& word)
-                  {
-                      if(frequency_table.count(word) == 0)
-                      {
-                          frequency_table[word] = 1;
-                      }
-                      else
-                      {
-                          frequency_table[word] = frequency_table[word]+1;
-                      }
-                  });
-
-    std::vector<std::pair<std::string, int>> sorted_frequencies{};    
-    std::transform(frequency_table.begin(), frequency_table.end(),
-                  std::back_inserter(sorted_frequencies),
-                  [&sorted_frequencies](auto const& pair)
-                  {
-                      return pair;
-                  });
-
-    auto map_compare = [&sort_by_key](std::pair<std::string, int>& a, std::pair<std::string, int>& b) 
-    {
-        if(sort_by_key)
-        {
-            return a.first < b.first;
-        }
-        else
-        {
-            return a.second > b.second;
-        }
-    };
-
-    std::sort(sorted_frequencies.begin(), sorted_frequencies.end(), map_compare);
-    std::for_each(sorted_frequencies.begin(), sorted_frequencies.end(),
-                  [key_align_right](auto const& pair)
-                  {
-                      if(key_align_right)
-                      {
-                          std::cout << std::setw(11) << std::right << pair.first << " " << pair.second << std::endl;
-                      }
-                      else
-                      {
-                          std::cout << std::setw(11) << std::left << pair.first << " " << pair.second << std::endl;
-                      }
-                      
-                  });
-}
-
-void remove(std::vector<std::string> & text, std::string const& word_to_remove)
-{
-    auto it {std::remove(text.begin(), text.end(), word_to_remove)};
-    text.erase(it, text.end());
-}
-
-void substitute(std::vector<std::string> & text, std::string const& word_to_substitute)
-{
-    auto it{std::find(word_to_substitute.begin(), word_to_substitute.end(), '+')};
-    if(it != word_to_substitute.end())
-    {
-        std::string old_word{word_to_substitute.begin(), it};
-        std::string new_word{it+1, word_to_substitute.end()};
-
-        std::replace(text.begin(), text.end(), old_word, new_word);
-    }
-    else
-    {
-        std::cerr << "\x1B[91mError: '" << word_to_substitute << "' is not a valid parameter for '--substitute'. The format should be '--substitute=old_word+new_word'.\x1B[0m" << std::endl;
-    }
-}
+#include "Text_Manip.h"
 
 int main(int argc, char* argv[])
 {
@@ -111,7 +26,7 @@ int main(int argc, char* argv[])
                   << " --substitute=<old>+<new> substitutes the given <old> word to the given <new> word(excluding '<' and '>') in the text.\n"
                   << " --remove=<word>          removes the given <word>(excluding the '<' and '>') from the text.\n"
                   << std::endl;
-        return 1;
+        return 0;
     }
 
     std::string filename{argv[1]};
@@ -147,6 +62,7 @@ int main(int argc, char* argv[])
                    [&split_arguments](std::string const& argument)
                    {
                       std::pair<std::string, std::string> arg_pair{};
+                      
                       auto it{std::find(argument.begin(), argument.end(), '=')};
                       if (it != argument.end())
                       {

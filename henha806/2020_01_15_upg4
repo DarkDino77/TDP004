@@ -1,0 +1,14 @@
+int main()
+{
+    // Unique tar bort alla dubletter i rad - Sortera först!
+    vector<string> text { istream_iterator<string{cin},
+                          istream_iterator<string>{} };
+
+    transform(begin(), end(), ostream_iterator<string>{cout, "\n"})
+    [&text](string const& word)
+    {
+        int n{count(begin(), end(), word)};
+        return word + ": " + to_string(n);
+    }
+
+}
